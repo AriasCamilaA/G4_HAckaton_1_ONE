@@ -17,6 +17,8 @@
     "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
