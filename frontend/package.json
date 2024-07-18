@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.2",
+    "mdb-react-ui-kit": "^8.0.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
