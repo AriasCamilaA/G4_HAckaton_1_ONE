@@ -1,0 +1,50 @@
+DROP DATABASE IF EXISTS key_manager;
+CREATE DATABASE key_manager;
+
+\c key_manager
+
+DROP TABLE IF EXISTS model;
+DROP TABLE IF EXISTS keys;
+DROP TABLE IF EXISTS service;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+
+CREATE TABLE roles
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE users
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    role_id INT REFERENCES roles(id) ON DELETE SET NULL
+);
+
+CREATE TABLE service
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE keys
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    key VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    service_id INT REFERENCES service(id) ON DELETE SET NULL
+);
+
+CREATE TABLE model
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    script TEXT NOT NULL,
+    key_id INT REFERENCES keys(id) ON DELETE CASCADE
+);

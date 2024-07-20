@@ -1,0 +1,64 @@
+package com.back.controller;
+
+import com.back.model.entities.Service;
+import com.back.service.ServiceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/services")
+public class ServiceController {
+    @Autowired
+    private ServiceService serviceService;
+
+    @PostMapping
+    public ResponseEntity<?> createService(@RequestBody Service service) {
+        try {
+            Service newService = serviceService.createService(service);
+            return ResponseEntity.ok(newService);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating service: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getServiceById(@PathVariable Long id) {
+        try {
+            return serviceService.getServiceById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error retrieving service: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllServices() {
+        try {
+            return ResponseEntity.ok(serviceService.getAllServices());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error retrieving all services: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateService(@PathVariable Long id, @RequestBody Service serviceDetails) {
+        try {
+            Service updatedService = serviceService.updateService(id, serviceDetails);
+            return ResponseEntity.ok(updatedService);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error updating service: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteService(@PathVariable Long id) {
+        try {
+            serviceService.deleteService(id);
+            return ResponseEntity.ok("Service deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting service: " + e.getMessage());
+        }
+    }
+}
