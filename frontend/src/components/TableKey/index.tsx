@@ -1,5 +1,7 @@
 "use client";
 
+import AddKey from '../../components/AddKey';
+import EditKey from '../../components/EditKey';
 import React from "react";
 import {
   Table,
@@ -14,24 +16,22 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
-  User,
   Pagination,
+  Tooltip,
+  Modal,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
-import { VerticalDotsIcon } from "./VerticalDotsIcon";
 import { SearchIcon } from "./SearchIcon";
 import { ChevronDownIcon } from "./ChevronDownIcon";
 import { columns, users, statusOptions } from "./data";
 import { capitalize } from "./utils";
+import { EditIcon } from "./EditIcon";
+import { DeleteIcon } from "./DeleteIcon";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-
-const INITIAL_VISIBLE_COLUMNS = ["keyname", "keyvalue", "initialdate", "expirationdate", "description"];
+const INITIAL_VISIBLE_COLUMNS = ["keyname", "keyvalue", "initialdate", "expirationdate", "description", "actions"];
 
 export default function App() {
   const [filterValue, setFilterValue] = React.useState("");
@@ -43,6 +43,18 @@ export default function App() {
     column: "age",
     direction: "ascending",
   });
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
+
+  const openEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(users.length / rowsPerPage);
@@ -95,55 +107,47 @@ export default function App() {
     switch (columnKey) {
       case "keyname":
         return (
-          <User
-            avatarProps={{ radius: "full", size: "sm", src: user.avatar }}
-            classNames={{
-              description: "text-default-500",
-            }}
-            description={user.expirationdate}
-            name={cellValue}
-          >
-            {user.expirationdate}
-          </User>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
         );
       case "keyvalue":
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-500">{user.expirationdate}</p>
           </div>
         );
       case "initialdate":
         return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.expirationdate]}
-            size="sm"
-            variant="dot"
-          >
-            {cellValue}
-          </Chip>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+          </div>
         );
       case "expirationdate":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
           </div>
         );
       case "description":
         return (
           cellValue
+        );
+      case "actions":
+        return (
+          <div className="relative flex items-center justify-center gap-2 w-full">
+            <Tooltip content="Edit key">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={openEditModal}>
+                <EditIcon />
+              </span>
+            </Tooltip>
+            <Tooltip color="danger" content="Delete user">
+              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                <DeleteIcon />
+              </span>
+            </Tooltip>
+          </div>
         );
       default:
         return cellValue;
@@ -174,7 +178,7 @@ export default function App() {
               base: "w-full sm:max-w-[44%]",
               inputWrapper: "border-1",
             }}
-            placeholder="Search by name..."
+            placeholder="Search by name ..."
             size="sm"
             startContent={<SearchIcon className="text-default-300" />}
             value={filterValue}
@@ -183,31 +187,6 @@ export default function App() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
@@ -237,13 +216,14 @@ export default function App() {
               className="bg-foreground text-background"
               endContent={<PlusIcon />}
               size="sm"
+              onPress={onOpen}
             >
               Add New
             </Button>
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {users.length} users</span>
+          <span className="text-default-400 text-small">Total {users.length} keys</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -292,25 +272,6 @@ export default function App() {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  const classNames = React.useMemo(
-    () => ({
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-      td: [
-        // changing the rows border radius
-        // first
-        "group-data-[first=true]:first:before:rounded-none",
-        "group-data-[first=true]:last:before:rounded-none",
-        // middle
-        "group-data-[middle=true]:before:rounded-none",
-        // last
-        "group-data-[last=true]:first:before:rounded-none",
-        "group-data-[last=true]:last:before:rounded-none",
-      ],
-    }),
-    [],
-  );
-
   return (
     <div className="lg:mx-auto lg:max-w-[56.25rem] 2xl:max-w-[79.25rem] p-5 mx-[120px] my-[60px] xl:max-w-[71.5rem]">
       <div className="flex flex-col gap-3">
@@ -325,12 +286,9 @@ export default function App() {
               wrapper: "after:bg-foreground after:text-background text-background",
             },
           }}
-          classNames={classNames}
           selectedKeys={selectedKeys}
-          selectionMode="multiple"
           sortDescriptor={sortDescriptor}
           topContent={topContent}
-          topContentPlacement="outside"
           onSelectionChange={setSelectedKeys}
           onSortChange={setSortDescriptor}
         >
@@ -340,6 +298,7 @@ export default function App() {
                 key={column.uid}
                 align={column.uid === "actions" ? "center" : "start"}
                 allowsSorting={column.sortable}
+                maxWidth={column.uid === "actions" ? "150px" : undefined}
               >
                 {column.name}
               </TableColumn>
@@ -347,13 +306,59 @@ export default function App() {
           </TableHeader>
           <TableBody emptyContent={"No users found"} items={sortedItems}>
             {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              <TableRow>
+                {(columnKey) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+      <Modal
+        isOpen={isOpen}
+        scrollBehavior={scrollBehavior}
+        onOpenChange={onOpenChange}
+        classNames={{
+          backdrop: "bg-gray-500/50",
+          base: "bg-white text-black",
+          header: "text-black",
+          body: "text-black",
+          footer: "text-black",
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody>
+                <AddKey />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isEditModalOpen}
+        scrollBehavior={scrollBehavior}
+        onOpenChange={closeEditModal}
+        classNames={{
+          backdrop: "bg-gray-500/50",
+          base: "bg-white text-black",
+          header: "text-black",
+          body: "text-black",
+          footer: "text-black",
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalBody>
+                <EditKey />
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

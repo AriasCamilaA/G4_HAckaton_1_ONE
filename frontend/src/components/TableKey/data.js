@@ -1,11 +1,12 @@
 import React from "react";
 const columns = [
   {name: "ID", uid: "id", sortable: true},
-  {name: "KEYNAME", uid: "keyname", sortable: true},
-  {name: "KEYVALUE", uid: "keyvalue", sortable: true},
+  {name: "KEY NAME", uid: "keyname", sortable: true},
+  {name: "KEY VALUE", uid: "keyvalue", sortable: true},
   {name: "INITIALDATE", uid: "initialdate", sortable: true},
   {name: "EXPIRATIONDATE", uid: "expirationdate"},
   {name: "DESCRIPTION", uid: "description"},
+  {name: "ACTIONS", uid: "actions"},
 ];
 
 const statusOptions = [

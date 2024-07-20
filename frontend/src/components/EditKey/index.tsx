@@ -68,7 +68,7 @@ export default function App() {
 
   return (
     <div className="mt-4 mb-4">
-        <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>Register key</h1>
+        <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>Edit key</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="w-full mb-4">
             <Input
@@ -147,7 +147,7 @@ export default function App() {
             className={`${poppins.className} w-full text-white bg-black py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
             disabled={keyState === KeyState.LOADING}
           >
-            {keyState === KeyState.LOADING ? "Loading..." : "Load key"}
+            {keyState === KeyState.LOADING ? "Loading..." : "Save key"}
           </Button>
 
           {keyState === KeyState.LOADED && (
