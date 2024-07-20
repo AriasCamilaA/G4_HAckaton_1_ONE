@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
 import { useForm } from 'react-hook-form';
 import { poppins } from "../../app/fonts";
+import { useRouter } from 'next/navigation';
 import { Alert } from "../../utilities";
 
 type FormValues = {
@@ -28,6 +29,8 @@ export default function App() {
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
+  const router = useRouter();
+
   const onSubmit = async (data: FormValues) => {
     setRecoveryState(RecoveryState.INITIATING);
 
@@ -44,6 +47,9 @@ export default function App() {
         icon: "success"
       });
 
+      
+      router.push('/login');
+
     } catch (error) {
       // Simulación de error de registro después de 1 segundo
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -59,7 +65,18 @@ export default function App() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="relative min-h-screen">
+      <div className="absolute top-0 left-0 p-4 z-10">
+        <Link href="/">
+          <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
+            <img className="w-8" src="/logo.svg" alt="logo" />
+            <span className={`${poppins.className} text-text font-medium text-sm md:text-base`}>
+              KeyCzar
+            </span>
+          </div>
+        </Link>
+      </div>
+      <div className="flex items-center justify-center min-h-screen">
       <div className="flex flex-col gap-4 w-full max-w-md">
         <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>Reset Password</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -108,6 +125,7 @@ export default function App() {
             <p className="text-red-500 text-xs mt-1 text-left">Error sending recovery email. Please try again.</p>
           )}
         </form>
+        </div>
       </div>
     </div>
   );
