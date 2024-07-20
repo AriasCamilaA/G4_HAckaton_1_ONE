@@ -106,7 +106,7 @@ export default function Navbar() {
 
               <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text">
                 <Link
-                  href="#"
+                  href="/registration"
                   className={`${poppins.className} text-text font-medium`}
                 >
                   Sign Up
