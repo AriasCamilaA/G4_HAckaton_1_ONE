@@ -4,15 +4,18 @@ import com.back.model.entities.Model;
 import com.back.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/models")
 public class ModelController {
+
     @Autowired
     private ModelService modelService;
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createModel(@RequestBody Model model) {
         try {
             Model newModel = modelService.createModel(model);
@@ -23,6 +26,7 @@ public class ModelController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getModelById(@PathVariable Long id) {
         try {
             return modelService.getModelById(id)
@@ -34,6 +38,7 @@ public class ModelController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getAllModels() {
         try {
             return ResponseEntity.ok(modelService.getAllModels());
@@ -43,6 +48,7 @@ public class ModelController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> updateModel(@PathVariable Long id, @RequestBody Model modelDetails) {
         try {
             Model updatedModel = modelService.updateModel(id, modelDetails);
@@ -53,6 +59,7 @@ public class ModelController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteModel(@PathVariable Long id) {
         try {
             modelService.deleteModel(id);

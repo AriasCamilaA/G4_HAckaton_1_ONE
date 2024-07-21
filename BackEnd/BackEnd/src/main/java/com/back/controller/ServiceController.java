@@ -4,15 +4,18 @@ import com.back.model.entities.Service;
 import com.back.service.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/services")
 public class ServiceController {
+
     @Autowired
     private ServiceService serviceService;
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createService(@RequestBody Service service) {
         try {
             Service newService = serviceService.createService(service);
@@ -23,6 +26,7 @@ public class ServiceController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getServiceById(@PathVariable Long id) {
         try {
             return serviceService.getServiceById(id)
@@ -34,6 +38,7 @@ public class ServiceController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getAllServices() {
         try {
             return ResponseEntity.ok(serviceService.getAllServices());
@@ -43,6 +48,7 @@ public class ServiceController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> updateService(@PathVariable Long id, @RequestBody Service serviceDetails) {
         try {
             Service updatedService = serviceService.updateService(id, serviceDetails);
@@ -53,6 +59,7 @@ public class ServiceController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteService(@PathVariable Long id) {
         try {
             serviceService.deleteService(id);

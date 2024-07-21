@@ -4,15 +4,18 @@ import com.back.model.entities.Role;
 import com.back.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/roles")
 public class RoleController {
+
     @Autowired
     private RoleService roleService;
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createRole(@RequestBody Role role) {
         try {
             Role newRole = roleService.createRole(role);
@@ -23,6 +26,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getRoleById(@PathVariable Long id) {
         try {
             return roleService.getRoleById(id)
@@ -34,6 +38,7 @@ public class RoleController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getAllRoles() {
         try {
             return ResponseEntity.ok(roleService.getAllRoles());
@@ -43,6 +48,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
         try {
             Role updatedRole = roleService.updateRole(id, roleDetails);
@@ -53,6 +59,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteRole(@PathVariable Long id) {
         try {
             roleService.deleteRole(id);

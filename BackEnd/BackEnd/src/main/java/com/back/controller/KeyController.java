@@ -5,6 +5,7 @@ import com.back.service.KeyService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ public class KeyController {
     private KeyService keyService;
 
     @PostMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> createKey(@RequestBody Key key) {
         try {
             Key newKey = keyService.createKey(key);
@@ -25,6 +27,7 @@ public class KeyController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getKeyById(@PathVariable Long id) {
         try {
             return keyService.getKeyById(id)
@@ -36,6 +39,7 @@ public class KeyController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> getAllKeys() {
         try {
             return ResponseEntity.ok(keyService.getAllKeys());
@@ -45,6 +49,7 @@ public class KeyController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> updateKey(@PathVariable Long id, @RequestBody Key keyDetails) {
         try {
             Key updatedKey = keyService.updateKey(id, keyDetails);
@@ -55,6 +60,7 @@ public class KeyController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteKey(@PathVariable Long id) {
         try {
             keyService.deleteKey(id);
