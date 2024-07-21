@@ -2,7 +2,9 @@
 
 ## Descripción
 
-El **API Key Manager** es una aplicación web que permite gestionar de manera segura y eficiente las API keys utilizadas en diversos servicios, especialmente en proyectos de inteligencia artificial. La aplicación ofrece funcionalidades para almacenar, categorizar, y monitorear las keys, así como registrar su uso y notificar sobre su expiración.
+El **API Key Manager** es una aplicación web que permite gestionar de manera segura y eficiente las API keys utilizadas
+en diversos servicios, especialmente en proyectos de inteligencia artificial. La aplicación ofrece funcionalidades para
+almacenar, categorizar, y monitorear las keys, así como registrar su uso y notificar sobre su expiración.
 
 ## Tecnologías Utilizadas
 
@@ -21,12 +23,34 @@ El **API Key Manager** es una aplicación web que permite gestionar de manera se
 
 ## Instalación
 
+### Backend
+#### Configuracion Keycloak
+- Descargar Keycloak desde la página oficial y descomprimir el archivo.
+
+URL: https://github.com/keycloak/keycloak/releases/download/25.0.2/keycloak-25.0.2.zip
+
+#### Configuracion CMD:
+Abrir la ventana de comandos en la "RUTA BASE DE KEYCLOAK" y ejecutar el siguiente comando,
+reemplazando con los datos del usario:
+
+- ```bin\kc.bat import --dir <ruta_al_directorio>```
+
+La ruta al directorio es la ubicación de la carpeta ConfigKey en el repositorio del proyecto.
+- Ejemplo "de ruta de directorio": ```C:\Users\<username>\<download>\<G4_HAckaton_1_ONE>\ConfigKey```
+
+- Ejemplo de ruta completa: ``` bin\kc.bat import --dir C:\Users\<username>\Documents\<G4_HAckaton_1_ONE>\ConfigKey```
+- Posteriormente, ejecutar este comando: ``` bin\kc.bat start-dev``` para iniciar el servidor de keycloak.
+#### Posibles errores de ejecucion
+Dada la posibilidad de algún fallo en la ejecución, escribir el siguiente comando en la terminal:
+
+``` bin\kc.bat start --verbose``` 
+
 ### Prerrequisitos
 
 - Java 11+
+- Keycloak
 - Node.js 14+
 - PostgreSQL
-
 
 # Funciones:
 
@@ -42,12 +66,11 @@ Backend Developer 2: Desarrollo de los controladores y lógica de negocio.
 
 Backend Developer 3: Implementación de las rutas y la autenticación de usuarios.
 
-
 ## Asignaciones:
 
 Wilson Osorio BackEnd 0303_ep - Back 3
 
-Erick Conquera BackEnd crewald7 GUATEMALA  - Back 1
+Erick Conquera BackEnd crewald7 GUATEMALA - Back 1
 
 Jair Chávez Islas BackEnd Jair0305 MÉXICO - Back 2
 
