@@ -1,0 +1,41 @@
+{
+  "realm" : "spring-boot_realm",
+  "users" : [ {
+    "id" : "9ac1326e-3420-43a5-b757-200dd59218da",
+    "username" : "admin",
+    "firstName" : "admin",
+    "lastName" : "admin",
+    "email" : "admin@gmail.com",
+    "emailVerified" : true,
+    "createdTimestamp" : 1721345803663,
+    "enabled" : true,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "eeaf26ec-a6ad-4e25-bc8f-605aaa0943d3",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1721345814662,
+      "secretData" : "{\"value\":\"Y3o2fZnBLOLQT2L/3Wn4QMvvBS94gfYYvwq32IX8q24=\",\"salt\":\"wBQ6/4oIi1Whfl8CtCkf9w==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-spring-boot_realm", "admin" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "aadc4267-e28a-423e-9752-a0f16d98f465",
+    "username" : "service-account-spring-boot-client",
+    "emailVerified" : false,
+    "createdTimestamp" : 1720915736171,
+    "enabled" : true,
+    "totp" : false,
+    "serviceAccountClientId" : "spring-boot-client",
+    "credentials" : [ ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-spring-boot_realm" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}
