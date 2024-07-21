@@ -35,10 +35,10 @@ reemplazando con los datos del usario:
 
 - ```bin\kc.bat import --dir <ruta_al_directorio>```
 
-La ruta al directorio es la ubicación de la carpeta ConfigKey en el repositorio del proyecto.
-- Ejemplo "de ruta de directorio": ```C:\Users\<username>\<download>\<G4_HAckaton_1_ONE>\ConfigKey```
+La ruta al directorio es la ubicación de la carpeta ConfigKey en el repositorio del proyecto en la carpeta BackEnd.
+- Ejemplo "de ruta de directorio": ```C:\Users\<username>\<download>\<G4_HAckaton_1_ONE>\BackEnd\ConfigKey```
 
-- Ejemplo de ruta completa: ``` bin\kc.bat import --dir C:\Users\<username>\Documents\<G4_HAckaton_1_ONE>\ConfigKey```
+- Ejemplo de ruta completa: ``` bin\kc.bat import --dir C:\Users\<username>\Documents\<G4_HAckaton_1_ONE>\BackEnd\ConfigKey```
 - Posteriormente, ejecutar este comando: ``` bin\kc.bat start-dev``` para iniciar el servidor de keycloak.
 #### Posibles errores de ejecucion
 Dada la posibilidad de algún fallo en la ejecución, escribir el siguiente comando en la terminal:
