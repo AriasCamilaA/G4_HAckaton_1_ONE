@@ -1,17 +1,24 @@
-"use client"
-import { Alert } from "App/utilities";
-import Image from "next/image";
+import Header from "../components/Header"
+import Services from "../components/Services"
+import Testimonials from "../components/Testimonials"
+import Feature from "../components/Feature"
+import CTA from "../components/CTA"
+import Navbar from "../components/Navbar"
+import Footer from "../components/Footer";
 
 export default function Home() {
-  Alert.fire({
-    title: "Probando SweetAlert2",
-    text: "You clicked the button!",
-    icon: "success"
-  });
-  
-  return(
-    <div>
-      Hello word
-    </div>
+
+  return (
+    <>
+      <div className="bg-white">
+        <Navbar />
+        <Header />
+        <Services />
+        <Testimonials />
+        <Feature />
+        <CTA />
+        <Footer />
+      </div>
+    </>
   )
 }

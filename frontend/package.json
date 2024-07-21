@@ -9,6 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.2",
+    "@nextui-org/input": "^2.2.4",
+    "@nextui-org/react": "^2.4.6",
+    "@nextui-org/system": "^2.2.5",
+    "@nextui-org/theme": "^2.2.9",
+    "framer-motion": "^11.3.8",
+    "mdb-react-ui-kit": "^8.0.0",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
@@ -17,6 +24,8 @@
     "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
+    "@types/node": "20.14.10",
+    "@types/react": "18.3.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
