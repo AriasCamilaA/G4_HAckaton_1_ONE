@@ -24,9 +24,9 @@ almacenar, categorizar, y monitorear las keys, así como registrar su uso y noti
 ## Instalación
 
 ### Backend
-#### Configuracion Keycloak
 - Descargar Keycloak desde la página oficial y descomprimir el archivo.
 
+#### Configuracion Keycloak
 URL: https://github.com/keycloak/keycloak/releases/download/25.0.2/keycloak-25.0.2.zip
 
 #### Configuracion CMD:
@@ -43,7 +43,11 @@ La ruta al directorio es la ubicación de la carpeta ConfigKey en el repositorio
 #### Posibles errores de ejecucion
 Dada la posibilidad de algún fallo en la ejecución, escribir el siguiente comando en la terminal:
 
-``` bin\kc.bat start --verbose``` 
+``` bin\kc.bat start --verbose```
+
+##### Credenciales por default 
+- Usuario: admin
+- Contraseña: admin
 
 ### Prerrequisitos
 
