@@ -18,7 +18,7 @@ enum RecoveryState {
   SUCCESS = "SUCCESS",
 }
 
-export default function App() {
+export default function Recover() {
   const [recoveryState, setRecoveryState] = useState<RecoveryState | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {

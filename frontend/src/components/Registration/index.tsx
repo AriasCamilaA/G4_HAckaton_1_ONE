@@ -20,7 +20,7 @@ enum RegistrationState {
   REGISTRATION_ERROR = "REGISTRATION_ERROR",
 }
 
-export default function RegistrationForm() {
+export default function Registration() {
   const [registrationState, setRegistrationState] = useState<RegistrationState | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {

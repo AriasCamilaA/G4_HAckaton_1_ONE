@@ -22,6 +22,7 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
+  Link,
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
 import { SearchIcon } from "./SearchIcon";
@@ -30,12 +31,13 @@ import { columns, users, statusOptions } from "./data";
 import { capitalize } from "./utils";
 import { EditIcon } from "./EditIcon";
 import { DeleteIcon } from "./DeleteIcon";
+import { CopyIcon } from "./CopyIcon";
+import { Alert } from "../../utilities";
 
 const INITIAL_VISIBLE_COLUMNS = ["keyname", "keyvalue", "initialdate", "expirationdate", "description", "actions"];
 
-export default function App() {
+export default function TableKey() {
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -101,6 +103,19 @@ export default function App() {
     });
   }, [sortDescriptor, items]);
 
+  const copyToClipboard = (user) => {
+    const textToCopy = `Key Name: ${user.keyname}\nKey Value: ${user.keyvalue}\nInitial Date: ${user.initialdate}\nExpiration Date: ${user.expirationdate}\nDescription: ${user.description}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      Alert.fire({
+        title: "Copy key",
+        text: "Key details copied to clipboard.",
+        icon: "success"
+      });
+    }).catch((err) => {
+      console.error('Failed to copy: ', err);
+    });
+  };
+
   const renderCell = React.useCallback((user, columnKey) => {
     const cellValue = user[columnKey];
 
@@ -136,6 +151,12 @@ export default function App() {
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2 w-full">
+            <Tooltip content="Copy key">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => copyToClipboard(user)}>
+                <CopyIcon />
+              </span>
+            </Tooltip>
             <Tooltip content="Edit key">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={openEditModal}>
@@ -260,36 +281,25 @@ export default function App() {
           isDisabled={hasSearchFilter}
           page={page}
           total={pages}
-          variant="light"
-          onChange={setPage}
+          onChange={(page) => setPage(page)}
         />
-        <span className="text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${items.length} selected`}
-        </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [page, pages, hasSearchFilter]);
 
   return (
-    <div className="lg:mx-auto lg:max-w-[56.25rem] 2xl:max-w-[79.25rem] p-5 mx-[120px] my-[60px] xl:max-w-[71.5rem]">
-      <div className="flex flex-col gap-3">
+    <div className="lg:mx-auto lg:max-w-[56.25rem] 2xl:max-w-[79.25rem] p-5 mx-[120px] my-[90px] xl:max-w-[71.5rem]">
+      <div className="w-full">
         <Table
-          isCompact
-          removeWrapper
-          aria-label="Example table with custom cells, pagination and sorting"
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          checkboxesProps={{
-            classNames: {
-              wrapper: "after:bg-foreground after:text-background text-background",
-            },
-          }}
-          selectedKeys={selectedKeys}
-          sortDescriptor={sortDescriptor}
+          aria-label="Keys table with CRUD actions"
           topContent={topContent}
-          onSelectionChange={setSelectedKeys}
+          bottomContent={bottomContent}
+          classNames={{
+            base: "",
+            table: "w-full overflow-visible",
+            th: "bg-transparent text-small text-default-500 font-normal",
+          }}
+          sortDescriptor={sortDescriptor}
           onSortChange={setSortDescriptor}
         >
           <TableHeader columns={headerColumns}>
@@ -298,67 +308,66 @@ export default function App() {
                 key={column.uid}
                 align={column.uid === "actions" ? "center" : "start"}
                 allowsSorting={column.sortable}
-                maxWidth={column.uid === "actions" ? "150px" : undefined}
               >
                 {column.name}
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
-            {(item) => (
-              <TableRow>
+          <TableBody emptyContent={"No users found"}>
+            {(sortedItems.length > 0 ? sortedItems : filteredItems).map((user) => (
+              <TableRow key={user.keyvalue}>
                 {(columnKey) => (
-                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                  <TableCell>{renderCell(user, columnKey)}</TableCell>
                 )}
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
+        <Modal
+          isOpen={isOpen}
+          scrollBehavior={scrollBehavior}
+          onOpenChange={onOpenChange}
+          classNames={{
+            backdrop: "bg-gray-500/50",
+            base: "bg-white text-black",
+            header: "text-black",
+            body: "text-black",
+            footer: "text-black",
+          }}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalBody>
+                  <AddKey />
+                </ModalBody>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+        <Modal
+          isOpen={isEditModalOpen}
+          scrollBehavior={scrollBehavior}
+          onOpenChange={closeEditModal}
+          classNames={{
+            backdrop: "bg-gray-500/50",
+            base: "bg-white text-black",
+            header: "text-black",
+            body: "text-black",
+            footer: "text-black",
+          }}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalBody>
+                  <EditKey />
+                </ModalBody>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
-      <Modal
-        isOpen={isOpen}
-        scrollBehavior={scrollBehavior}
-        onOpenChange={onOpenChange}
-        classNames={{
-          backdrop: "bg-gray-500/50",
-          base: "bg-white text-black",
-          header: "text-black",
-          body: "text-black",
-          footer: "text-black",
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalBody>
-                <AddKey />
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-      <Modal
-        isOpen={isEditModalOpen}
-        scrollBehavior={scrollBehavior}
-        onOpenChange={closeEditModal}
-        classNames={{
-          backdrop: "bg-gray-500/50",
-          base: "bg-white text-black",
-          header: "text-black",
-          body: "text-black",
-          footer: "text-black",
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalBody>
-                <EditKey />
-              </ModalBody>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </div>
   );
 }

@@ -19,7 +19,7 @@ enum AuthState {
   AUTHENTICATION_ERROR = "AUTHENTICATION_ERROR",
 }
 
-export default function LoginForm() {
+export default function Login() {
   const [authState, setAuthState] = useState<AuthState>(AuthState.NOT_AUTHENTICATED);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<FormValues>({
@@ -44,7 +44,7 @@ export default function LoginForm() {
       setAuthState(AuthState.AUTHENTICATED);
       console.log("Login successful with:", data.email, data.password);
 
-      router.push('/Dashboard');
+      router.push('/dashboard');
       
     } catch (error: unknown) {
       // Simulación de error de autenticación después de 1 segundo

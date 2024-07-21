@@ -20,7 +20,7 @@ enum KeyState {
   ERROR = "ERROR",
 }
 
-export default function App() {
+export default function EditKey() {
   const [keyState, setKeyState] = useState<KeyState>(KeyState.NOT_LOADED);
   const form = useForm<FormValues>({
     defaultValues: {

@@ -19,7 +19,7 @@ enum PasswordState {
   REGISTRATION_ERROR = "REGISTRATION_ERROR",
 }
 
-export default function App() {
+export default function Password() {
   const [passwordState, setPasswordState] = useState<PasswordState>(PasswordState.NOT_REGISTERED);
   const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña
   const form = useForm<FormValues>({
