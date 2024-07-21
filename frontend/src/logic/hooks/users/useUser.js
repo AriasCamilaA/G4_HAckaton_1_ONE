@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { adaptUser } from '../adapters/userAdapter';
 
-const useUsers = () => {
-  const [users, setUsers] = useState([]);
+const useUser = (userId) => {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUser = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`);
         const data = await response.json();
-        setUsers(data.map(adaptUser));
+        setUser(adaptUser(data));
       } catch (err) {
         setError(err);
       } finally {
@@ -19,10 +19,10 @@ const useUsers = () => {
       }
     };
 
-    fetchUsers();
-  }, []);
+    fetchUser();
+  }, [userId]);
 
-  return { users, loading, error };
+  return { user, loading, error };
 };
 
-export default useUsers;
+export default useUser;

@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { adaptRole } from '../adapters/roleAdapter';
 
-const useRoles = () => {
-  const [roles, setRoles] = useState([]);
+const useRole = (roleId) => {
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchRoles = async () => {
+    const fetchRole = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`);
         const data = await response.json();
-        setRoles(data.map(adaptRole));
+        setRole(adaptRole(data));
       } catch (err) {
         setError(err);
       } finally {
@@ -19,10 +19,10 @@ const useRoles = () => {
       }
     };
 
-    fetchRoles();
-  }, []);
+    fetchRole();
+  }, [roleId]);
 
-  return { roles, loading, error };
+  return { role, loading, error };
 };
 
-export default useRoles;
+export default useRole;

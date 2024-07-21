@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { adaptKey } from '../adapters/keyAdapter';
 
-const useKeys = () => {
-  const [keys, setKeys] = useState([]);
+const useKey = (keyId) => {
+  const [key, setKey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchKeys = async () => {
+    const fetchKey = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`);
         const data = await response.json();
-        setKeys(data.map(adaptKey));
+        setKey(adaptKey(data));
       } catch (err) {
         setError(err);
       } finally {
@@ -19,10 +19,10 @@ const useKeys = () => {
       }
     };
 
-    fetchKeys();
-  }, []);
+    fetchKey();
+  }, [keyId]);
 
-  return { keys, loading, error };
+  return { key, loading, error };
 };
 
-export default useKeys;
+export default useKey;

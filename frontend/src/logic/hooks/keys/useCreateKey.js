@@ -7,7 +7,7 @@ const useCreateKey = () => {
   const createKey = async (keyData) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/keys', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(keyData),

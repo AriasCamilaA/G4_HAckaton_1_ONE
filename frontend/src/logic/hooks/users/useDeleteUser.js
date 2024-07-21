@@ -7,7 +7,7 @@ const useDeleteUser = () => {
   const deleteUser = async (userId) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting user');

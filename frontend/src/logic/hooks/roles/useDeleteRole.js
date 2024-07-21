@@ -7,7 +7,7 @@ const useDeleteRole = () => {
   const deleteRole = async (roleId) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/roles/${roleId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting role');

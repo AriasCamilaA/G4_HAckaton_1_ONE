@@ -7,7 +7,7 @@ const useUpdateModel = () => {
   const updateModel = async (modelId, modelData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/models/${modelId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(modelData),

@@ -7,7 +7,7 @@ const useUpdateKey = () => {
   const updateKey = async (keyId, keyData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/keys/${keyId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(keyData),

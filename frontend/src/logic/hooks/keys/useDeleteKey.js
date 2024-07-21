@@ -7,7 +7,7 @@ const useDeleteKey = () => {
   const deleteKey = async (keyId) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/keys/${keyId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting key');

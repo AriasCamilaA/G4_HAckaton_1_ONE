@@ -7,7 +7,7 @@ const useDeleteModel = () => {
   const deleteModel = async (modelId) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/models/${modelId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting model');

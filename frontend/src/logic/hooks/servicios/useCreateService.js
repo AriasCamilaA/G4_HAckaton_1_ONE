@@ -7,7 +7,7 @@ const useCreateService = () => {
   const createService = async (serviceData) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/services', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(serviceData),

@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { adaptService } from '../adapters/serviceAdapter';
 
-const useServices = () => {
-  const [services, setServices] = useState([]);
+const useService = (serviceId) => {
+  const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchService = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services/${serviceId}`);
         const data = await response.json();
-        setServices(data.map(adaptService));
+        setService(adaptService(data));
       } catch (err) {
         setError(err);
       } finally {
@@ -19,10 +19,10 @@ const useServices = () => {
       }
     };
 
-    fetchServices();
-  }, []);
+    fetchService();
+  }, [serviceId]);
 
-  return { services, loading, error };
+  return { service, loading, error };
 };
 
-export default useServices;
+export default useService;

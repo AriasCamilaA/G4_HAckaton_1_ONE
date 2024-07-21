@@ -7,7 +7,7 @@ const useUpdateService = () => {
   const updateService = async (serviceId, serviceData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/services/${serviceId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services/${serviceId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(serviceData),

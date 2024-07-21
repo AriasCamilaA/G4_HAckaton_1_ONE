@@ -7,7 +7,7 @@ const useUpdateRole = () => {
   const updateRole = async (roleId, roleData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/roles/${roleId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(roleData),

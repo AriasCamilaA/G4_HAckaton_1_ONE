@@ -7,7 +7,7 @@ const useCreateModel = () => {
   const createModel = async (modelData) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/models', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(modelData),

@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       // Supongamos que tienes un endpoint para obtener datos del usuario desde el token
-      fetch('/api/auth/me', {
+      fetch('${process.env.NEXT_PUBLIC_API_URL}/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => res.json())
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

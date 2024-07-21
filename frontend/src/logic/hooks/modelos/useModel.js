@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { adaptModel } from '../adapters/modelAdapter';
 
-const useModels = () => {
-  const [models, setModels] = useState([]);
+const useModel = (modelId) => {
+  const [model, setModel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchModels = async () => {
+    const fetchModel = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`);
         const data = await response.json();
-        setModels(data.map(adaptModel));
+        setModel(adaptModel(data));
       } catch (err) {
         setError(err);
       } finally {
@@ -19,10 +19,10 @@ const useModels = () => {
       }
     };
 
-    fetchModels();
-  }, []);
+    fetchModel();
+  }, [modelId]);
 
-  return { models, loading, error };
+  return { model, loading, error };
 };
 
-export default useModels;
+export default useModel;
