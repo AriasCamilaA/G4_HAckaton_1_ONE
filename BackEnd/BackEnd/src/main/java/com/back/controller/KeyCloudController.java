@@ -75,7 +75,7 @@ public class KeyCloudController {
         }
     }
 
-    @PreAuthorize("hasRole('${swagger.role.admin}')")
+    @PreAuthorize("hasdmin}')")
     @PutMapping("update/user")
     @Operation(
             summary = "Update user",
