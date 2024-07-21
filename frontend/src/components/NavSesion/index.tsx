@@ -11,15 +11,14 @@ export default function NavSesion() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    setSessionState("Cerrando sesión: El usuario ha solicitado cerrar su sesión actual.");
+    console.log("Cerrando sesión: El usuario ha solicitado cerrar su sesión actual.");
     try {
       // Simula el proceso de cierre de sesión (puedes reemplazar esto con una llamada real a una API)
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      setSessionState("Sesión cerrada: La sesión se ha cerrado correctamente.");
+      console.log("Sesión cerrada: La sesión se ha cerrado correctamente.");
       router.push('/login');
-      
     } catch (error) {
-      setSessionState("Error al cerrar sesión: Hubo un problema al intentar cerrar la sesión.");
+      console.log("Error al cerrar sesión: Hubo un problema al intentar cerrar la sesión.");
     }
   };
 
