@@ -4,9 +4,11 @@ import com.back.security.jwt.JwtResponse;
 import com.back.security.service.IKeyCloudService;
 import com.back.security.util.KeyCloud;
 import com.back.security.util.model.User;
+import com.back.service.UserService;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.mapper.Mapper;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.UserResource;
@@ -30,6 +32,8 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
 
     private final KeyCloud keyCloud;
     private final RestTemplate rest;
+    private final UserService userService;
+    private com.back.model.entities.User builders;
 
     @Value("${keycloak.url.token}")
     String tokenUrl;
@@ -81,6 +85,16 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
             // Asignar roles al usuario
             assignRoles(user, realmResource, idUser);
 
+
+
+            builders = com.back.model.entities.User.builder()
+                    .name( user.firstName())
+                    .email(user.email())
+                    .password(user.password())
+                    .roles(user.roles())
+                    .build();
+
+            userService.createUser(builders);
             return "User created successfully!!";
         } else if (status == 409) {
             log.error("User already exists!");
