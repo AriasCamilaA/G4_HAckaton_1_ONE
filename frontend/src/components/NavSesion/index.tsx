@@ -34,27 +34,30 @@ export default function NavSesion() {
   };
 
   return (
-    <div>
-      <div className="flex justify-start p-4 absolute-position">
-        <Link href="/dashboard">
-          <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-            <img className="w-8" src="/logo.svg" alt="logo" />
-            <span
-              className={`${poppins.className} text-text font-medium text-sm md:text-base`}
-            >
-              KeyCzar
+    <div className=" mx-auto p-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]">
+      <div className="flex items-center justify-between">
+        <div>
+          <Link href="/dashboard">
+            <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
+              <img className="w-8" src="/logo.svg" alt="logo" />
+              <span
+                className={`${poppins.className} text-text font-medium text-sm md:text-base`}
+              >
+                KeyCzar
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        <div>
+          <div
+            className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110 cursor-pointer"
+            onClick={handleLogout}
+          >
+            <span className="mr-2 text-sm font-medium text-text md:text-base">
+              Log out
             </span>
           </div>
-        </Link>
-      </div>
-      <div className="absolute top-0 right-0 flex justify-end p-4">
-        <div
-          className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110 cursor-pointer"
-          onClick={handleLogout}
-        >
-          <span className="mr-2 text-sm font-medium text-text md:text-base">
-            Log out
-          </span>
         </div>
       </div>
       {sessionState && (
