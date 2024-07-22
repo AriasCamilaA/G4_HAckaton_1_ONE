@@ -90,7 +90,6 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
                 builders = com.back.model.entities.User.builder()
                         .name(user.firstName())
                         .email(user.email())
-                        .password(user.password())
                         .idKeycloak(representation.getId())
                         .roles(user.roles())
                         .build();

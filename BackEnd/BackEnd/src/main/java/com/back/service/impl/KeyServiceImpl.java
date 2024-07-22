@@ -1,17 +1,15 @@
 package com.back.service.impl;
 
-import com.back.exception.MessageException;
 import com.back.model.entities.Key;
 import com.back.model.entities.User;
+import com.back.model.entities.projection.IkeyDTO;
 import com.back.repository.KeyRepository;
 import com.back.repository.UserRepository;
 import com.back.security.util.AuthService;
 import com.back.service.KeyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +73,15 @@ public class KeyServiceImpl implements KeyService {
             keyRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting key with id " + id + ": " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<IkeyDTO> getKeysByService(Long serviceId) {
+        try {
+            return keyRepository.findKeysByServiceId(serviceId);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving keys by service: " + e.getMessage());
         }
     }
 }
