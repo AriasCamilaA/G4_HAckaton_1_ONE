@@ -1,22 +1,29 @@
 import { useState } from 'react';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useCreateService = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const createService = async (serviceData) => {
+  const createService = async (serviceData, bearer) => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${bearer}`
+        },
         body: JSON.stringify(serviceData),
       });
-      if (!response.ok) throw new Error('Error creating service');
-      setLoading(false);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error creating service');
+      }
+      const data = await response.json();
+      console.log(data);
     } catch (err) {
       setError(err);
+    } finally {
       setLoading(false);
     }
   };

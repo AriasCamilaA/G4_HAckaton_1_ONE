@@ -1,22 +1,29 @@
 import { useState } from 'react';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useCreateRole = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const createRole = async (roleData) => {
+  const createRole = async (roleData, bearer) => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${bearer}`
+        },
         body: JSON.stringify(roleData),
       });
-      if (!response.ok) throw new Error('Error creating role');
-      setLoading(false);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error creating role');
+      }
+      const data = await response.json();
+      console.log(data);
     } catch (err) {
       setError(err);
+    } finally {
       setLoading(false);
     }
   };

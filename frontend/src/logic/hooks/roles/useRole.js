@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { adaptRole } from '../adapters/roleAdapter';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
-const useRole = (roleId) => {
+const useRole = (roleId, bearer) => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +9,11 @@ const useRole = (roleId) => {
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
+          headers: {
+            'Authorization': `Bearer ${bearer}`
+          }
+        });
         const data = await response.json();
         setRole(adaptRole(data));
       } catch (err) {
@@ -21,7 +24,7 @@ const useRole = (roleId) => {
     };
 
     fetchRole();
-  }, [roleId]);
+  }, [roleId, bearer]);
 
   return { role, loading, error };
 };

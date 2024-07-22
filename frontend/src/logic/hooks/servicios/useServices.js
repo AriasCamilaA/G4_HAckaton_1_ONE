@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { adaptService } from '../adapters/serviceAdapter';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
-const useServices = () => {
+const useServices = (bearer) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +9,11 @@ const useServices = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/services/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services/all`, {
+          headers: {
+            'Authorization': `Bearer ${bearer}`
+          }
+        });
         const data = await response.json();
         setServices(data.map(adaptService));
       } catch (err) {
@@ -21,7 +24,7 @@ const useServices = () => {
     };
 
     fetchServices();
-  }, []);
+  }, [bearer]);
 
   return { services, loading, error };
 };

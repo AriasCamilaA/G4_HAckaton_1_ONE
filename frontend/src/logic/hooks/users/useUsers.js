@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { adaptUser } from '../adapters/userAdapter';
 
-const useUsers = () => {
+const useUsers = (bearer) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,7 +9,11 @@ const useUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/all`, {
+          headers: {
+            'Authorization': `Bearer ${bearer}`
+          }
+        });
         const data = await response.json();
         setUsers(data.map(adaptUser));
       } catch (err) {
@@ -20,7 +24,7 @@ const useUsers = () => {
     };
 
     fetchUsers();
-  }, []);
+  }, [bearer]);
 
   return { users, loading, error };
 };

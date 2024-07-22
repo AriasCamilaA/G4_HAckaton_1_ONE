@@ -21,7 +21,7 @@ const useAuth = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token); // Guarda el token en localStorage
+      localStorage.setItem('token', data.access_token); // Guarda el token en localStorage
       setLoading(false);
       return data;
     } catch (err) {

@@ -44,7 +44,6 @@ export default function Login() {
     try {
       await login(data.username, data.password)
         .then((res) => {
-          // console.log(res);
           setAuthState(AuthState.AUTHENTICATED);
           Alert.fire({
             title: "Log in",

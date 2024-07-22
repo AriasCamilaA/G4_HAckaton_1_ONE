@@ -1,29 +1,29 @@
-import { useState, useEffect } from 'react';
-import { adaptModel } from '../adapters/modelAdapter';
-import fetchWithAuth from '../auth/useFetchWithAuth';
+import { useState } from 'react';
 
-const useModels = () => {
-  const [models, setModels] = useState([]);
-  const [loading, setLoading] = useState(true);
+const useUpdateModel = () => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchModels = async () => {
-      try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/models/all`);
-        const data = await response.json();
-        setModels(data.map(adaptModel));
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const updateModel = async (modelId, modelData, bearer) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${bearer}`
+        },
+        body: JSON.stringify(modelData),
+      });
+      if (!response.ok) throw new Error('Error updating model');
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchModels();
-  }, []);
-
-  return { models, loading, error };
+  return { updateModel, loading, error };
 };
 
-export default useModels;
+export default useUpdateModel;

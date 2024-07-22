@@ -1,22 +1,24 @@
 import { useState } from 'react';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useUpdateRole = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const updateRole = async (roleId, roleData) => {
+  const updateRole = async (roleId, roleData, bearer) => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${bearer}`
+        },
         body: JSON.stringify(roleData),
       });
       if (!response.ok) throw new Error('Error updating role');
-      setLoading(false);
     } catch (err) {
       setError(err);
+    } finally {
       setLoading(false);
     }
   };

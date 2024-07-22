@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { adaptKey } from '../adapters/keyAdapter';
-import fetchWithAuth from '../auth/useFetchWithAuth';
 
-const useKeys = () => {
+const useKeys = (bearer) => {
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +9,11 @@ const useKeys = () => {
   useEffect(() => {
     const fetchKeys = async () => {
       try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`, {
+          headers: {
+            'Authorization': `Bearer ${bearer}`
+          }
+        });
         const data = await response.json();
         setKeys(data.map(adaptKey));
       } catch (err) {
@@ -21,7 +24,7 @@ const useKeys = () => {
     };
 
     fetchKeys();
-  }, []);
+  }, [bearer]);
 
   return { keys, loading, error };
 };
