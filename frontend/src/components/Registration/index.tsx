@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { poppins } from "../../app/fonts";
 import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
-import useRegister from '../../logic/hooks/auth/useRegister';
+import useRegister from "../../logic/hooks/auth/useRegister";
 
 type FormValues = {
   username: string;
@@ -26,7 +26,8 @@ enum RegistrationState {
 
 export default function Registration() {
   const { registerUser, loading, error } = useRegister();
-  const [registrationState, setRegistrationState] = useState<RegistrationState | null>(null);
+  const [registrationState, setRegistrationState] =
+    useState<RegistrationState | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {
       username: "",
@@ -35,7 +36,7 @@ export default function Registration() {
       email: "",
       confirmEmail: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     },
   });
 
@@ -58,32 +59,33 @@ export default function Registration() {
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
-        roles: ["admin"]
+        roles: ["admin"],
       };
 
-      await registerUser(userData).then(() => {
-        console.log("User registered successfully");
-        // setRegistrationState(RegistrationState.REGISTERED);
-  
-        Alert.fire({
-          title: "Create account",
-          text: "Registration successful",
-          icon: "success"
+      await registerUser(userData)
+        .then(() => {
+          console.log("User registered successfully");
+          // setRegistrationState(RegistrationState.REGISTERED);
+
+          Alert.fire({
+            title: "Create account",
+            text: "Registration successful",
+            icon: "success",
+          });
+
+          router.push("/login");
+        })
+        .catch((error) => {
+          console.error("Error registering user:", error);
+          throw error;
         });
-  
-        router.push('/login');
-      }).catch((error) => {
-        console.error("Error registering user:", error);
-        throw error;
-      });
-      
     } catch (error) {
       setRegistrationState(RegistrationState.REGISTRATION_ERROR);
       console.error("Registration error:", error);
       Alert.fire({
         title: "Create account",
         text: error.message || "Something has gone wrong.",
-        icon: "error"
+        icon: "error",
       });
     }
   };
@@ -123,7 +125,9 @@ export default function Registration() {
                 disabled={loading}
               />
               {errors.username && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.username.message}
                 </p>
               )}
@@ -230,7 +234,9 @@ export default function Registration() {
                 disabled={loading}
               />
               {errors.password && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.password.message}
                 </p>
               )}
@@ -245,13 +251,15 @@ export default function Registration() {
                 autoComplete="new-password"
                 {...register("confirmPassword", {
                   required: "Please confirm your password",
-                  validate: value =>
-                    value === watch('password') || "Passwords do not match",
+                  validate: (value) =>
+                    value === watch("password") || "Passwords do not match",
                 })}
                 disabled={loading}
               />
               {errors.confirmPassword && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -260,7 +268,7 @@ export default function Registration() {
               <Button
                 type="submit"
                 color="primary"
-                className={`${poppins.className} w-1/2 mb-4 text-white bg-black py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
+                className={`${poppins.className} w-1/2 mb-4 text-white py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
                 disabled={loading}
               >
                 {loading ? "Registering..." : "Sign Up"}
@@ -268,7 +276,7 @@ export default function Registration() {
               <Button
                 type="reset"
                 color="primary"
-                className={`${poppins.className} w-1/2 text-text  mb-4 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text`}
+                className={`${poppins.className} w-1/2 text-text  mb-4 py-3 transition duration-200 bg-white ease-in-out border rounded-lg hover:scale-110 border-text`}
                 disabled={loading}
                 onClick={handleSignInClick}
               >
@@ -287,4 +295,3 @@ export default function Registration() {
     </div>
   );
 }
-

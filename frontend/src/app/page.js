@@ -25,15 +25,15 @@ export default function Home() {
   }
   return (
     <>
-      <div className="bg-white">
         <Navbar />
+        <div className="space-y-[130px] lg:space-y-[250px] ">
         <Header />
         <Services />
         <Testimonials />
         <Feature />
         <CTA />
+        </div>
         <Footer />
-      </div>
     </>
   )
 }
