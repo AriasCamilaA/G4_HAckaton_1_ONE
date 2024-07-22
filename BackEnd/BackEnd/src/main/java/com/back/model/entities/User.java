@@ -1,10 +1,9 @@
 package com.back.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CollectionType;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,8 +18,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String password;
     private String email;
+
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String idKeycloak;
+
     @ElementCollection
     private Set<String> roles;
 }

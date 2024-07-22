@@ -2,10 +2,12 @@ package com.back.controller;
 
 import com.back.config.SwaggerConfig;
 import com.back.security.service.IKeyCloudService;
+import com.back.security.util.AuthService;
 import com.back.security.util.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import java.net.URISyntaxException;
 @RequestMapping("/api/keycloud")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('${swagger.role.admin}')")
+@Slf4j
 public class KeyCloudController {
 
     private final IKeyCloudService keyCloudService;
@@ -31,7 +34,10 @@ public class KeyCloudController {
             description = "Get all users from the keycloak server"
     )
     public ResponseEntity<?> findAllUsers() {
+                    log.info(AuthService.getAuthenticatedUserId());
+            log.info(AuthService.getAuthenticatedUsername());
         return ResponseEntity.ok(keyCloudService.findAllUsers());
+
     }
 
     @PreAuthorize("permitAll()")
@@ -75,7 +81,7 @@ public class KeyCloudController {
         }
     }
 
-    @PreAuthorize("hasdmin}')")
+    @PreAuthorize("hasRole('${swagger.role.admin}')")
     @PutMapping("update/user")
     @Operation(
             summary = "Update user",

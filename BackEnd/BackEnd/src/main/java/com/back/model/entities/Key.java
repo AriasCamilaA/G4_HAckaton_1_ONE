@@ -29,10 +29,14 @@ public class Key {
     private LocalDateTime expiresAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = true)
     private Service service;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id", nullable = true)
+    private Model model;
 }
