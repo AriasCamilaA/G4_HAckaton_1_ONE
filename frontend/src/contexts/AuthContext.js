@@ -17,9 +17,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem('token', userData.token);
+    localStorage.setItem('token', userData.access_token);
     setUser(userData);
-    router.push('/dashboard');
+    router.push('/Dashboard');
   };
 
   const logout = () => {

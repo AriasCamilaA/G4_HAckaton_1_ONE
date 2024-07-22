@@ -1,27 +1,40 @@
 import { useState, useEffect } from 'react';
-import { adaptKey } from '../adapters/keyAdapter';
-import fetchWithAuth from '../auth/useFetchWithAuth';
+import { adaptKey } from '../../adapters/keyAdapter';
 
-const useKeys = () => {
+const useKeys = (bearer) => {
   const [keys, setKeys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchKeys = async () => {
+      console.log("useKeys.js: fetchKeys: bearer: ", bearer);
       try {
-        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`, {
+          headers: {
+            'Authorization': `Bearer ${bearer}`
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`Error fetching keys: ${response.statusText}`);
+        }
         const data = await response.json();
-        setKeys(data.map(adaptKey));
+        console.log("useKeys.js: fetchKeys: data: ", data);
+        setKeys(data);
       } catch (err) {
         setError(err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchKeys();
-  }, []);
+    if (bearer) {
+      fetchKeys();
+    } else {
+      setLoading(false);
+    }
+  }, [bearer]);
 
   return { keys, loading, error };
 };

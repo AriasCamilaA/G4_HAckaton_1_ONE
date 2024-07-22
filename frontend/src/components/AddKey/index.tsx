@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Button } from "@nextui-org/react";
 import { useForm } from 'react-hook-form';
 import { poppins } from "../../app/fonts";
 import { Alert } from "../../utilities";
 import useCreateKey from '../../logic/hooks/keys/useCreateKey';
+import { useAuth } from "../../contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 
 type FormValues = {
@@ -25,6 +27,15 @@ enum KeyState {
 export default function App() {
   const [keyState, setKeyState] = useState<KeyState>(KeyState.NOT_LOADED);
   const { createKey, loading, error } = useCreateKey();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   
   const form = useForm<FormValues>({
     defaultValues: {
@@ -40,23 +51,38 @@ export default function App() {
 
   const onSubmit = async (data: FormValues) => {
     setKeyState(KeyState.LOADING);
-
     try {
       await createKey({
-        nombre: data.keyName,
+        name: data.keyName,
         key: data.keyValue,
-        fecha_caducidad: data.expirationDate,
-        descripcion: data.description,
+        expiresAt: new Date(data.expirationDate).toISOString(),
+        createdAt: new Date().toISOString(),
+        user: {
+          id: 1
+        },
+        service: {
+          id: 1
+        }
+        // descripcion: data.description,
+      }, user?.token).then((res) => {
+        console.log(res);
+        setKeyState(KeyState.LOADED);
+        Alert.fire({
+          title: "Add key",
+          text: "Successdssasdsful registration",
+          icon: "success"
+        });
+        setKeyState(KeyState.LOADED);
+        console.log("Key loaded successfully:", data.keyName, data.keyValue, data.expirationDate, data.description);
+      }).catch((err) => {
+        console.log(err);
+        setKeyState(KeyState.ERROR);
+        Alert.fire({
+          title: "Add key",
+          text: "Something has gone wrong.",
+          icon: "error"
+        });
       });
-      setKeyState(KeyState.LOADED);
-      console.log("Key loaded successfully:", data.keyName, data.keyValue, data.expirationDate, data.description);
-
-      Alert.fire({
-        title: "Add key",
-        text: "Successful registration",
-        icon: "success"
-      });
-
     } catch (error) {
       setKeyState(KeyState.ERROR);
       console.error("Error loading key:", error);
