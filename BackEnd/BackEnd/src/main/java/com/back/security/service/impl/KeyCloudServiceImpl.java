@@ -68,40 +68,40 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
         UserRepresentation userRepresentation = getUserRepresentation(user);
 
         // Crear el usuario en Keycloak
-        Response response = usersResource.create(userRepresentation);
-        int status = response.getStatus();
-        
-        if (status == 201) {
-            String path = response.getLocation().getPath();
-            String idUser = path.substring(path.lastIndexOf("/") + 1);
+        try (Response response = usersResource.create(userRepresentation)) {
+            int status = response.getStatus();
 
-            // Asignar la contraseña al usuario
-            CredentialRepresentation credentialRepresentation = getCredentialRepresentation(user);
-            usersResource.get(idUser)
-                    .resetPassword(credentialRepresentation);
+            if (status == 201) {
+                String path = response.getLocation().getPath();
+                String idUser = path.substring(path.lastIndexOf("/") + 1);
 
-            RealmResource realmResource = keyCloud.getRealmResource();
-            List<RoleRepresentation> rolesRepresentation = null;
-            // Asignar roles al usuario
-            assignRoles(user, realmResource, idUser);
+                // Asignar la contraseña al usuario
+                CredentialRepresentation credentialRepresentation = getCredentialRepresentation(user);
+                usersResource.get(idUser)
+                        .resetPassword(credentialRepresentation);
+
+                RealmResource realmResource = keyCloud.getRealmResource();
+                List<RoleRepresentation> rolesRepresentation = null;
+                // Asignar roles al usuario
+                assignRoles(user, realmResource, idUser);
 
 
+                builders = com.back.model.entities.User.builder()
+                        .name(user.firstName())
+                        .email(user.email())
+                        .password(user.password())
+                        .roles(user.roles())
+                        .build();
 
-            builders = com.back.model.entities.User.builder()
-                    .name( user.firstName())
-                    .email(user.email())
-                    .password(user.password())
-                    .roles(user.roles())
-                    .build();
-
-            userService.createUser(builders);
-            return "User created successfully!!";
-        } else if (status == 409) {
-            log.error("User already exists!");
-            return "User already exists!";
-        } else {
-            log.error("Error creating user, please contact the administrator.");
-            return "Error creating user, please contact the administrator.";
+                userService.createUser(builders);
+                return "User created successfully!!";
+            } else if (status == 409) {
+                log.error("User already exists!");
+                return "User already exists!";
+            } else {
+                log.error("Error creating user, please contact the administrator.");
+                return "Error creating user, please contact the administrator.";
+            }
         }
     }
 

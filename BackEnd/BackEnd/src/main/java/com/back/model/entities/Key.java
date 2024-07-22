@@ -35,4 +35,8 @@ public class Key {
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = true)
     private Service service;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id", nullable = true)
+    private Model model;
 }

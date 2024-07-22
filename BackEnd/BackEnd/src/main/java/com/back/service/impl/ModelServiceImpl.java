@@ -48,7 +48,7 @@ public class ModelServiceImpl implements ModelService {
             return modelRepository.findById(id)
                     .map(model -> {
                         model.setName(modelDetails.getName());
-                        model.setKey(modelDetails.getKey());
+//                        model.setKey(modelDetails.getKey());
                         model.setScript(modelDetails.getScript());
                         return modelRepository.save(model);
                     }).orElseThrow(() -> new RuntimeException("Model not found with id " + id));

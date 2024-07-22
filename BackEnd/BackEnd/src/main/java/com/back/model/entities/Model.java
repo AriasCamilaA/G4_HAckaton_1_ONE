@@ -22,7 +22,7 @@ public class Model {
     @Column(columnDefinition = "TEXT")
     private String script;
 
-    @ManyToOne
-    @JoinColumn(name = "key_id", nullable = false)
-    private Key key;
+//    @ManyToOne
+//    @JoinColumn(name = "key_id", nullable = false)
+//    private Key key;
 }
