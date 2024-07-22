@@ -3,22 +3,29 @@
 import { useState } from "react";
 import { poppins } from "../../app/fonts";
 import { Link } from "@nextui-org/react";
+import { useAuth } from '../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { Alert } from "../../utilities";
 
 export default function NavSesion() {
+  const { logout } = useAuth();
   const [sessionState, setSessionState] = useState("");
-
   const router = useRouter();
 
   const handleLogout = async () => {
     console.log("Cerrando sesión: El usuario ha solicitado cerrar su sesión actual.");
     try {
-      // Simula el proceso de cierre de sesión (puedes reemplazar esto con una llamada real a una API)
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      logout(); // Llama al método de logout desde el contexto
+      Alert.fire({
+        title: "Logout successful",
+        text: "You have been logged out successfully.",
+        icon: "success"
+      });
+      router.push("/"); // Redirige al usuario a la página
       console.log("Sesión cerrada: La sesión se ha cerrado correctamente.");
-      router.push('/login');
     } catch (error) {
       console.log("Error al cerrar sesión: Hubo un problema al intentar cerrar la sesión.");
+      setSessionState("Error al cerrar sesión. Inténtalo de nuevo.");
     }
   };
 
