@@ -84,16 +84,17 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
                 List<RoleRepresentation> rolesRepresentation = null;
                 // Asignar roles al usuario
                 assignRoles(user, realmResource, idUser);
-
+                UserRepresentation representation = usersResource.get(idUser).toRepresentation();
+                log.info("Id creacion de usuario"+ representation.getId());
 
                 builders = com.back.model.entities.User.builder()
                         .name(user.firstName())
                         .email(user.email())
                         .password(user.password())
+                        .idKeycloak(representation.getId())
                         .roles(user.roles())
                         .build();
-
-                userService.createUser(builders);
+                com.back.model.entities.User userEn = userService.createUser(builders);
                 return "User created successfully!!";
             } else if (status == 409) {
                 log.error("User already exists!");

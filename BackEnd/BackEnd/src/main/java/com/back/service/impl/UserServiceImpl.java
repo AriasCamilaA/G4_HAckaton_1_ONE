@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User findByIdKeycloak(String idKeycloak) {
+        return userRepository.findByIdKeycloak(idKeycloak);
+    }
 }

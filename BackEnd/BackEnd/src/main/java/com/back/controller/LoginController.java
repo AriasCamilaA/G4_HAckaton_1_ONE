@@ -3,9 +3,11 @@ package com.back.controller;
 import com.back.security.jwt.JwtRequest;
 import com.back.security.jwt.JwtResponse;
 import com.back.security.service.IKeyCloudService;
+import com.back.security.util.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/keycloud")
 @RequiredArgsConstructor
+@Slf4j
 public class LoginController {
 
     private final IKeyCloudService iKeyCloudService;
@@ -30,6 +33,8 @@ public class LoginController {
             String name = request.getUsername();
             String password = request.getPassword();
             JwtResponse jwtResponse = iKeyCloudService.login(name, password);
+//            log.info(AuthService.getAuthenticatedUserId());
+//            log.info(AuthService.getAuthenticatedUsername());
             return ResponseEntity.ok(jwtResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
