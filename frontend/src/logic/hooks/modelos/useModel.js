@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adaptModel } from '../adapters/modelAdapter';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useModel = (modelId) => {
   const [model, setModel] = useState(null);
@@ -9,7 +10,7 @@ const useModel = (modelId) => {
   useEffect(() => {
     const fetchModel = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`);
+        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`);
         const data = await response.json();
         setModel(adaptModel(data));
       } catch (err) {

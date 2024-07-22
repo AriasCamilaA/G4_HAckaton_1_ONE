@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useUpdateKey = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useUpdateKey = () => {
   const updateKey = async (keyId, keyData) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(keyData),

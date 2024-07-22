@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useCreateRole = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useCreateRole = () => {
   const createRole = async (roleData) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(roleData),

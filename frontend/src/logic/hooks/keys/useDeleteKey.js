@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useDeleteKey = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useDeleteKey = () => {
   const deleteKey = async (keyId) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting key');

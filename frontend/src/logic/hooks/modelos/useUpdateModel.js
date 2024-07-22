@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useUpdateModel = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useUpdateModel = () => {
   const updateModel = async (modelId, modelData) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(modelData),

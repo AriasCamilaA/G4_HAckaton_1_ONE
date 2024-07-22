@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { poppins } from "../../app/fonts";
 import { useRouter } from 'next/navigation';
 import { Alert } from "../../utilities";
+import useAuth from '../../logic/hooks/auth/useAuth';
 
 type FormValues = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -20,11 +21,12 @@ enum AuthState {
 }
 
 export default function Login() {
+  const { login, loading, error } = useAuth();
   const [authState, setAuthState] = useState<AuthState>(AuthState.NOT_AUTHENTICATED);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<FormValues>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -37,34 +39,34 @@ export default function Login() {
   const onSubmit = async (data: FormValues) => {
     setAuthState(AuthState.AUTHENTICATING);
 
-    // Aquí simula la lógica de autenticación (la llamada a la BD)
     try {
-      // Simulación de autenticación exitosa después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setAuthState(AuthState.AUTHENTICATED);
-      console.log("Login successful with:", data.email, data.password);
-
-      router.push('/dashboard');
-      
-    } catch (error: unknown) {
-      // Simulación de error de autenticación después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setAuthState(AuthState.AUTHENTICATION_ERROR);
-      if (error instanceof Error) {
-        console.error("Authentication failed:", error.message);
+      await login(data.username, data.password)
+      .then((res) => {
+        // console.log(res);
+        setAuthState(AuthState.AUTHENTICATED);
         Alert.fire({
           title: "Log in",
-          text: "Incorrect username and/or password",
-          icon: "error"
+          text: "Login successful",
+          icon: "success"
         });
-      } else {
-        console.error("Authentication failed:", error);
+        router.push('/Dashboard');
+      }).catch((err) => {
+        console.log(err);
+        setAuthState(AuthState.AUTHENTICATION_ERROR);
         Alert.fire({
           title: "Log in",
           text: "Incorrect username and/or password",
           icon: "error"
         });
       }
+      );
+    } catch (err) {
+      setAuthState(AuthState.AUTHENTICATION_ERROR);
+      Alert.fire({
+        title: "Log in",
+        text: "Incorrect username and/or password",
+        icon: "error"
+      });
     }
   };
 
@@ -91,23 +93,23 @@ export default function Login() {
             <div className="w-full mb-4">
               <Input
                 isRequired
-                type="email"
-                label="E-mail"
-                placeholder="Enter your E-mail"
+                type="text"
+                label="Username"
+                placeholder="Enter your Username"
                 className={`${poppins.className} w-full`}
-                autoComplete="email"
-                disabled={authState === AuthState.AUTHENTICATING}
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Enter a valid email address",
-                  },
+                autoComplete="username"
+                disabled={loading}
+                {...register("username", {
+                  required: "username is required",
+                  // pattern: {
+                  //   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  //   message: "Enter a valid username address",
+                  // },
                 })}
               />
-              {errors.email && (
+              {errors.username && (
                 <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
-                  {errors.email.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -119,7 +121,7 @@ export default function Login() {
                 placeholder="Enter your password"
                 className={`${poppins.className} w-full`}
                 autoComplete="new-password"
-                disabled={authState === AuthState.AUTHENTICATING}
+                disabled={loading}
                 {...register("password", {
                   required: "Password is required",
                 })}
@@ -149,9 +151,9 @@ export default function Login() {
                 type="submit"
                 color="primary"
                 className={`${poppins.className} w-full text-white bg-black py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
-                disabled={authState === AuthState.AUTHENTICATING}
+                disabled={loading}
               >
-                {authState === AuthState.AUTHENTICATING ? "Signing in..." : "Sign in"}
+                {loading ? "Signing in..." : "Sign in"}
               </Button>
             </div>
             
@@ -162,11 +164,11 @@ export default function Login() {
               </Link>
             </div>
           </form>
+          {error && (
+            <p className="text-red-500 text-xs mt-1 text-left">Error logging in. Please try again.</p>
+          )}
         </div>
       </div>
     </div>
   );
-  
-
-
 }

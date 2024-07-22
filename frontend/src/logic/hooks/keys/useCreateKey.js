@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useCreateKey = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useCreateKey = () => {
   const createKey = async (keyData) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(keyData),

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adaptKey } from '../adapters/keyAdapter';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useKey = (keyId) => {
   const [key, setKey] = useState(null);
@@ -9,7 +10,7 @@ const useKey = (keyId) => {
   useEffect(() => {
     const fetchKey = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`);
+        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/keys/${keyId}`);
         const data = await response.json();
         setKey(adaptKey(data));
       } catch (err) {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useDeleteModel = () => {
   const [loading, setLoading] = useState(false);
@@ -7,7 +8,7 @@ const useDeleteModel = () => {
   const deleteModel = async (modelId) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
+      const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/models/${modelId}`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Error deleting model');

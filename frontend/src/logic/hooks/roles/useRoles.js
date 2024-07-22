@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adaptRole } from '../adapters/roleAdapter';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useRoles = () => {
   const [roles, setRoles] = useState([]);
@@ -9,7 +10,7 @@ const useRoles = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/all`);
+        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/roles/all`);
         const data = await response.json();
         setRoles(data.map(adaptRole));
       } catch (err) {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adaptService } from '../adapters/serviceAdapter';
+import fetchWithAuth from '../auth/useFetchWithAuth';
 
 const useService = (serviceId) => {
   const [service, setService] = useState(null);
@@ -9,7 +10,7 @@ const useService = (serviceId) => {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/services/${serviceId}`);
+        const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_URL}/services/${serviceId}`);
         const data = await response.json();
         setService(adaptService(data));
       } catch (err) {
