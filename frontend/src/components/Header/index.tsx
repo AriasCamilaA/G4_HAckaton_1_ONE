@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function Header() {
   return (
     <header
-      className="lg:mx-auto mt-[205px] mb-[130px] px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem]"
+      className="lg:mx-auto pt-[205px] lg:pt-[320px] px-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]"
       id="home"
     >
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center">
@@ -36,7 +36,7 @@ export default function Header() {
               </Link>
             </button>
 
-            <button className="w-full py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text md:w-[211px]">
+            <button className="w-full py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 border-text md:w-[211px]">
               <Link
                 href="#"
                 className={`${montserrat.className} text-text font-medium`}
@@ -47,7 +47,7 @@ export default function Header() {
           </div>
         </div>
 
-        <div>
+        <div className="w-full xl:w-1/2">
           <Image
             src="/heroimage2.png"
             alt="Header image"

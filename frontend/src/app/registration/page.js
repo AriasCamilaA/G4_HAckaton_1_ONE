@@ -18,7 +18,7 @@ export default function Home() {
       return <div>Loading...</div>;
     }
     return (
-        <div className="bg-white">
+        <div>
             <Registration />
         </div>
     );

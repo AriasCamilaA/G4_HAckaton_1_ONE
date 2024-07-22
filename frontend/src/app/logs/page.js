@@ -4,7 +4,7 @@ import NavSesion from '../../components/NavSesion';
 
 export default function logs() {
     return (
-        <div className="bg-white">
+        <div>
             <NavSesion />
             <Tracing />
         </div>

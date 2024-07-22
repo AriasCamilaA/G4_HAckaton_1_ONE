@@ -4,7 +4,7 @@ import NavSesion from '../../components/NavSesion';
 
 export default function Home() {
     return (
-        <div className="bg-white">
+        <div>
             <NavSesion />
             <Dashboard />
         </div>

@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import { poppins } from "../../app/fonts";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
 import useRegister from '../../logic/hooks/auth/useRegister';
 
@@ -45,7 +45,7 @@ export default function Registration() {
   const router = useRouter();
 
   const handleSignInClick = () => {
-    router.push('/login');
+    router.push("/login");
   };
 
   const onSubmit = async (data: FormValues) => {
@@ -89,20 +89,26 @@ export default function Registration() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      <div className="absolute top-0 left-0 p-4 z-10">
+    <div className="relative min-h-screen px-5 lg:px-0 mx-auto lg:w-[60rem]">
+      <div className="absolute top-0 left-0 z-10 px-5 pt-4">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
             <img className="w-8" src="/logo.svg" alt="logo" />
-            <span className={`${poppins.className} text-text font-medium text-sm md:text-base`}>
+            <span
+              className={`${poppins.className} text-text font-medium text-sm md:text-base`}
+            >
               KeyCzar
             </span>
           </div>
         </Link>
       </div>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col gap-4 w-full max-w-md">
-          <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>Create account</h1>
+        <div className="flex flex-col w-full max-w-md gap-4">
+          <h1
+            className={`${poppins.className} text-3xl font-bold text-center mb-3`}
+          >
+            Create account
+          </h1>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="w-full mb-4">
               <Input
@@ -135,7 +141,9 @@ export default function Registration() {
                 disabled={loading}
               />
               {errors.firstName && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.firstName.message}
                 </p>
               )}
@@ -153,7 +161,9 @@ export default function Registration() {
                 disabled={loading}
               />
               {errors.lastName && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.lastName.message}
                 </p>
               )}
@@ -176,7 +186,9 @@ export default function Registration() {
                 disabled={loading}
               />
               {errors.email && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.email.message}
                 </p>
               )}
@@ -191,13 +203,15 @@ export default function Registration() {
                 autoComplete="email"
                 {...register("confirmEmail", {
                   required: "Please confirm your email",
-                  validate: value =>
-                    value === watch('email') || "Emails do not match",
+                  validate: (value) =>
+                    value === watch("email") || "Emails do not match",
                 })}
                 disabled={loading}
               />
               {errors.confirmEmail && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.confirmEmail.message}
                 </p>
               )}
@@ -261,9 +275,11 @@ export default function Registration() {
                 Sign in
               </Button>
             </div>
-  
+
             {registrationState === RegistrationState.REGISTRATION_ERROR && (
-              <p className="text-red-500 text-xs mt-1 text-left">Error registering user. Please try again.</p>
+              <p className="mt-1 text-xs text-left text-red-500">
+                Error registering user. Please try again.
+              </p>
             )}
           </form>
         </div>
@@ -271,3 +287,4 @@ export default function Registration() {
     </div>
   );
 }
+

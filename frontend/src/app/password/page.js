@@ -4,7 +4,7 @@ import Password from '../../components/Password';
 
 export default function Home() {
     return (
-        <div className="bg-white">
+        <div>
             <Password />
         </div>
     );

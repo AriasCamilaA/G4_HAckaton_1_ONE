@@ -4,7 +4,7 @@ import NavSesion from '../../components/NavSesion';
 
 export default function Managekeys() {
     return (
-        <div className="bg-white">
+        <div>
             <NavSesion />
             <TableKey />
         </div>
