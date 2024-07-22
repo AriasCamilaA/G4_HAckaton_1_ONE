@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function CTA() {
   return (
-    <section className="mx-auto mb-[130px] px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem]">
+    <section className="px-5 mx-auto lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:max-w-[95.25rem]">
       <div className="flex flex-col justify-between xl:flex-row">
         <div className="flex flex-col items-center gap-5 xl:items-start">
           <h2
@@ -30,7 +30,7 @@ export default function CTA() {
               Get Started
             </Link>
           </button>
-          <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text md:w-1/2 xl:w-auto">
+          <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 border-text md:w-1/2 xl:w-auto">
             <Link
               href="#"
               className={`${poppins.className} text-text font-medium`}

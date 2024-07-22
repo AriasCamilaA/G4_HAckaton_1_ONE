@@ -38,7 +38,7 @@ const ServiceCard = ({ imgSrc, alt, title, description, link }) => (
       alt={alt}
       width={600}
       height={400}
-      className="w-full h-[200px] lg:h-[188px]"
+      className="w-full h-[200px] lg:h-[188px] xl:h-[300px]"
     />
     <div className="flex flex-col items-center justify-center mt-[35px]">
       <h3
@@ -63,7 +63,7 @@ const ServiceCard = ({ imgSrc, alt, title, description, link }) => (
 
 export default function Services() {
   return (
-    <section className="lg:mx-auto mb-[130px] px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem]">
+    <section className="lg:mx-auto px-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]">
       <h2
         className={`${poppins.className} font-bold text-2xl text-center xl:text-4xl mb-[67px]`}
       >

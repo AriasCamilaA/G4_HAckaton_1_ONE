@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import { poppins } from "../../app/fonts";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
 
 type FormValues = {
@@ -21,7 +21,8 @@ enum RegistrationState {
 }
 
 export default function Registration() {
-  const [registrationState, setRegistrationState] = useState<RegistrationState | null>(null);
+  const [registrationState, setRegistrationState] =
+    useState<RegistrationState | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {
       firstName: "",
@@ -37,7 +38,7 @@ export default function Registration() {
   const router = useRouter();
 
   const handleSignInClick = () => {
-    router.push('/login');
+    router.push("/login");
   };
 
   const onSubmit = async (data: FormValues) => {
@@ -46,41 +47,52 @@ export default function Registration() {
     // Aquí simula la lógica de autenticación (la llamada a la BD)
     try {
       // Simulación de registro exitoso después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setRegistrationState(RegistrationState.REGISTERED);
 
-      console.log("Login successful with:", data.firstName, data.lastName, data.email, data.confirmEmail);
+      console.log(
+        "Login successful with:",
+        data.firstName,
+        data.lastName,
+        data.email,
+        data.confirmEmail
+      );
 
-      router.push('/password');
-      
+      router.push("/password");
     } catch (error) {
       // Simulación de error de registro después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setRegistrationState(RegistrationState.REGISTRATION_ERROR);
       console.error("Registration error:", error);
       Alert.fire({
         title: "Create account",
         text: "Something has gone wrong.",
-        icon: "error"
+        icon: "error",
       });
     }
   };
 
   return (
-    <div className="relative min-h-screen">
-      <div className="absolute top-0 left-0 p-4 z-10">
+    <div className="relative min-h-screen px-5 lg:px-0 mx-auto lg:w-[60rem]">
+      <div className="absolute top-0 left-0 z-10 px-5 pt-4">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
             <img className="w-8" src="/logo.svg" alt="logo" />
-            <span className={`${poppins.className} text-text font-medium text-sm md:text-base`}>
+            <span
+              className={`${poppins.className} text-text font-medium text-sm md:text-base`}
+            >
               KeyCzar
             </span>
           </div>
         </Link>
       </div>
       <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col gap-4 w-full max-w-md">
-          <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>Create account</h1>
+        <div className="flex flex-col w-full max-w-md gap-4">
+          <h1
+            className={`${poppins.className} text-3xl font-bold text-center mb-3`}
+          >
+            Create account
+          </h1>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="w-full mb-4">
               <Input
@@ -95,7 +107,9 @@ export default function Registration() {
                 disabled={registrationState === RegistrationState.REGISTERING}
               />
               {errors.firstName && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.firstName.message}
                 </p>
               )}
@@ -113,7 +127,9 @@ export default function Registration() {
                 disabled={registrationState === RegistrationState.REGISTERING}
               />
               {errors.lastName && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.lastName.message}
                 </p>
               )}
@@ -136,7 +152,9 @@ export default function Registration() {
                 disabled={registrationState === RegistrationState.REGISTERING}
               />
               {errors.email && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.email.message}
                 </p>
               )}
@@ -151,13 +169,15 @@ export default function Registration() {
                 autoComplete="email"
                 {...register("confirmEmail", {
                   required: "Please confirm your email",
-                  validate: value =>
-                    value === watch('email') || "Emails do not match",
+                  validate: (value) =>
+                    value === watch("email") || "Emails do not match",
                 })}
                 disabled={registrationState === RegistrationState.REGISTERING}
               />
               {errors.confirmEmail && (
-                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                <p
+                  className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
+                >
                   {errors.confirmEmail.message}
                 </p>
               )}
@@ -166,24 +186,28 @@ export default function Registration() {
               <Button
                 type="submit"
                 color="primary"
-                className={`${poppins.className} w-1/2 mb-4 text-white bg-black py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
+                className={`${poppins.className} w-1/2 mb-4 text-white py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
                 disabled={registrationState === RegistrationState.REGISTERING}
               >
-                {registrationState === RegistrationState.REGISTERING ? "Registering..." : "Sign Up"}
+                {registrationState === RegistrationState.REGISTERING
+                  ? "Registering..."
+                  : "Sign Up"}
               </Button>
               <Button
                 type="reset"
                 color="primary"
-                className={`${poppins.className} w-1/2 text-text  mb-4 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text`}
+                className={`${poppins.className} w-1/2 text-text  mb-4 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-white border-text`}
                 disabled={registrationState === RegistrationState.REGISTERING}
                 onClick={handleSignInClick}
               >
                 Sign in
               </Button>
             </div>
-  
+
             {registrationState === RegistrationState.REGISTRATION_ERROR && (
-              <p className="text-red-500 text-xs mt-1 text-left">Error registering user. Please try again.</p>
+              <p className="mt-1 text-xs text-left text-red-500">
+                Error registering user. Please try again.
+              </p>
             )}
           </form>
         </div>

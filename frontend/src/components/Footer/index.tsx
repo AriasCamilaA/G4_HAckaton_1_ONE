@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="mx-auto px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem] pb-[60px]">
+    <footer className="mx-auto px-5 pt-[130px] lg:pt-[250px] lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:max-w-[95.25rem] pb-[60px]">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-10 lg:mb-[70px]">
         <Link className="flex items-center gap-[10px] mb-10 lg:mb-0" href="/">
           <img className="w-8" src="/logo.svg" alt="logo" />
@@ -33,11 +33,21 @@ export default function Footer() {
         </ul>
 
         <div className="flex items-center gap-3 mt-8 lg:mt-0">
-          <img className="w-5 " src="facebook.svg" alt="Facebook" />
-          <img className="w-5 " src="instagram.svg" alt="Instagram" />
-          <img className="w-5 " src="twitter.svg" alt="Twitter" />
-          <img className="w-5 " src="linkedin.svg" alt="LinkedIn" />
-          <img className="w-5 " src="youtube.svg" alt="Youtube" />
+          <a href="">
+            <img className="w-5 " src="facebook.svg" alt="Facebook" />
+          </a>
+          <a href="">
+            <img className="w-5 " src="instagram.svg" alt="Instagram" />
+          </a>
+          <a href="">
+            <img className="w-5 " src="twitter.svg" alt="Twitter" />
+          </a>
+          <a href="">
+            <img className="w-5 " src="linkedin.svg" alt="LinkedIn" />
+          </a>
+          <a href="">
+            <img className="w-5 " src="youtube.svg" alt="Youtube" />
+          </a>
         </div>
       </div>
 

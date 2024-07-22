@@ -37,11 +37,11 @@ export default function Navbar() {
     <div
       className={`fixed top-0 z-50 w-full p-5 lg:shadow-md lg:left-1/2 lg:w-[56.25rem] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:transform lg:transition-all lg:duration-300 ${
         isScrolled
-          ? "w-full rounded-none bg-background-color lg:top-[40px] lg:w-screen shadow-md"
-          : "w-full bg-background-color lg:top-[55px] lg:rounded-xl lg:bg-gray-200 lg:bg-opacity-10 lg:px-4 xl:w-[80%] 2xl:w-[79.25rem]"
+          ? "w-full rounded-none bg-white lg:top-[40px] lg:w-screen shadow-md"
+          : "w-full bg-white lg:top-[80px] lg:rounded-xl lg:bg-gray-200 lg:bg-opacity-10 lg:px-4 xl:w-[95%] 2xl:w-[95.25rem]"
       }`}
     >
-      <nav className="flex items-center justify-between lg:mx-auto 2xl:max-w-[79.25rem]">
+      <nav className="flex items-center justify-between lg:mx-auto 2xl:max-w-[92.25rem]">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
             <img className="w-8" src="/logo.svg" alt="logo" />
@@ -74,7 +74,7 @@ export default function Navbar() {
             isMenuOpen
               ? "translate-x-0 transition-transform lg:transition-none"
               : "translate-x-full transition-transform md:transition-none lg:translate-x-0"
-          } absolute right-0 top-0 h-screen w-2/3 bg-[#7C858E] px-10 py-[80px] lg:relative lg:h-auto lg:w-auto lg:gap-4 lg:bg-transparent lg:px-0 lg:py-0`}
+          } absolute right-0 top-0 h-screen w-2/3 bg-background-color px-10 py-[80px] lg:relative lg:h-auto lg:w-auto lg:gap-4 lg:bg-transparent lg:px-0 lg:py-0`}
         >
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
             <ul className="gap-3 space-y-10 lg:flex lg:space-x-4 lg:space-y-0">
@@ -84,7 +84,7 @@ export default function Navbar() {
                     <Link href={`/${item.toLowerCase().replace(/ /g, "")}`}>
                       <span
                         onClick={closeMenu}
-                        className={`${poppins.className} font-medium text-white lg:text-black lg:hover:text-primary`}
+                        className={`${poppins.className} font-medium text-text lg:hover:text-primary`}
                       >
                         {item}
                       </span>
@@ -104,7 +104,7 @@ export default function Navbar() {
                 </Link>
               </button>
 
-              <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text">
+              <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 border-text">
                 <Link
                   href="/registration"
                   className={`${poppins.className} text-text font-medium`}

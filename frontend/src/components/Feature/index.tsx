@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Feature() {
   return (
-    <section className="mx-auto mb-[130px] px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem]">
+    <section className="mx-auto px-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]">
       <div className="flex flex-col items-center gap-16 md:flex-row">
         <div className="flex flex-col items-center md:items-start md:w-1/2">
           <span
@@ -27,7 +27,7 @@ export default function Feature() {
           </p>
 
           <div className="flex gap-3 lg:items-center">
-            <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text">
+            <button className="px-8 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 border-text">
               <Link
                 href="#"
                 className={`${poppins.className} text-text font-medium`}

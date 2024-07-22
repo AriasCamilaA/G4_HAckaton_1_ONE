@@ -7,7 +7,7 @@ export default function Testimonials() {
   const stars = Array(5).fill("/star.svg");
 
   return (
-    <section className="mx-auto mb-[130px] px-5 lg:max-w-[56.25rem] xl:max-w-[80%] 2xl:max-w-[79.25rem]">
+    <section className="mx-auto px-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]">
       <div className="flex flex-col items-center gap-16 md:flex-row">
         <div className="w-full md:w-1/2">
           <Image
@@ -15,7 +15,7 @@ export default function Testimonials() {
             alt="Profile"
             width={600}
             height={400}
-            className="w-full h-[509px] lg:w-[511px] xl:w-full"
+            className="w-full h-[509px] lg:w-[511px] xl:h-[700px] xl:w-full"
           />
         </div>
 
