@@ -1,10 +1,11 @@
 package com.back.model.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CollectionType;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +21,6 @@ public class User {
     private String name;
     private String password;
     private String email;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = true)
-    private Role role;
+    @ElementCollection
+    private Set<String> roles;
 }
