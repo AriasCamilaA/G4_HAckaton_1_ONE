@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import { Input, Button, Link } from "@nextui-org/react";
@@ -6,12 +6,16 @@ import { useForm } from 'react-hook-form';
 import { poppins } from "../../app/fonts";
 import { useRouter } from 'next/navigation';
 import { Alert } from "../../utilities";
+import useRegister from '../../logic/hooks/auth/useRegister';
 
 type FormValues = {
+  username: string;
   firstName: string;
   lastName: string;
   email: string;
   confirmEmail: string;
+  password: string;
+  confirmPassword: string;
 };
 
 enum RegistrationState {
@@ -21,13 +25,17 @@ enum RegistrationState {
 }
 
 export default function Registration() {
+  const { registerUser, loading, error } = useRegister();
   const [registrationState, setRegistrationState] = useState<RegistrationState | null>(null);
   const form = useForm<FormValues>({
     defaultValues: {
+      username: "",
       firstName: "",
       lastName: "",
       email: "",
       confirmEmail: "",
+      password: "",
+      confirmPassword: ""
     },
   });
 
@@ -43,24 +51,38 @@ export default function Registration() {
   const onSubmit = async (data: FormValues) => {
     setRegistrationState(RegistrationState.REGISTERING);
 
-    // Aquí simula la lógica de autenticación (la llamada a la BD)
     try {
-      // Simulación de registro exitoso después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setRegistrationState(RegistrationState.REGISTERED);
+      const userData = {
+        username: data.username,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        roles: ["admin"]
+      };
 
-      console.log("Login successful with:", data.firstName, data.lastName, data.email, data.confirmEmail);
-
-      router.push('/password');
+      await registerUser(userData).then(() => {
+        console.log("User registered successfully");
+        // setRegistrationState(RegistrationState.REGISTERED);
+  
+        Alert.fire({
+          title: "Create account",
+          text: "Registration successful",
+          icon: "success"
+        });
+  
+        router.push('/login');
+      }).catch((error) => {
+        console.error("Error registering user:", error);
+        throw error;
+      });
       
     } catch (error) {
-      // Simulación de error de registro después de 1 segundo
-      await new Promise(resolve => setTimeout(resolve, 1000));
       setRegistrationState(RegistrationState.REGISTRATION_ERROR);
       console.error("Registration error:", error);
       Alert.fire({
         title: "Create account",
-        text: "Something has gone wrong.",
+        text: error.message || "Something has gone wrong.",
         icon: "error"
       });
     }
@@ -86,13 +108,31 @@ export default function Registration() {
               <Input
                 isRequired
                 type="text"
+                label="Username"
+                placeholder="Enter your username"
+                className={`${poppins.className} w-full`}
+                {...register("username", {
+                  required: "Username is required",
+                })}
+                disabled={loading}
+              />
+              {errors.username && (
+                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                  {errors.username.message}
+                </p>
+              )}
+            </div>
+            <div className="w-full mb-4">
+              <Input
+                isRequired
+                type="text"
                 label="First Name"
                 placeholder="Enter your first name"
                 className={`${poppins.className} w-full`}
                 {...register("firstName", {
                   required: "First name is required",
                 })}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
               />
               {errors.firstName && (
                 <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
@@ -110,7 +150,7 @@ export default function Registration() {
                 {...register("lastName", {
                   required: "Last name is required",
                 })}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
               />
               {errors.lastName && (
                 <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
@@ -133,7 +173,7 @@ export default function Registration() {
                     message: "Enter a valid email address",
                   },
                 })}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
               />
               {errors.email && (
                 <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
@@ -141,7 +181,7 @@ export default function Registration() {
                 </p>
               )}
             </div>
-            <div className="w-full mb-9">
+            <div className="w-full mb-4">
               <Input
                 isRequired
                 type="email"
@@ -154,11 +194,51 @@ export default function Registration() {
                   validate: value =>
                     value === watch('email') || "Emails do not match",
                 })}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
               />
               {errors.confirmEmail && (
                 <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
                   {errors.confirmEmail.message}
+                </p>
+              )}
+            </div>
+            <div className="w-full mb-4">
+              <Input
+                isRequired
+                type="password"
+                label="Password"
+                placeholder="Enter your password"
+                className={`${poppins.className} w-full`}
+                autoComplete="new-password"
+                {...register("password", {
+                  required: "Password is required",
+                })}
+                disabled={loading}
+              />
+              {errors.password && (
+                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <div className="w-full mb-9">
+              <Input
+                isRequired
+                type="password"
+                label="Confirm Password"
+                placeholder="Enter your confirm password"
+                className={`${poppins.className} w-full`}
+                autoComplete="new-password"
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: value =>
+                    value === watch('password') || "Passwords do not match",
+                })}
+                disabled={loading}
+              />
+              {errors.confirmPassword && (
+                <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
+                  {errors.confirmPassword.message}
                 </p>
               )}
             </div>
@@ -167,15 +247,15 @@ export default function Registration() {
                 type="submit"
                 color="primary"
                 className={`${poppins.className} w-1/2 mb-4 text-white bg-black py-3 transition duration-200 ease-in-out rounded-lg bg-text hover:scale-110 `}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
               >
-                {registrationState === RegistrationState.REGISTERING ? "Registering..." : "Sign Up"}
+                {loading ? "Registering..." : "Sign Up"}
               </Button>
               <Button
                 type="reset"
                 color="primary"
                 className={`${poppins.className} w-1/2 text-text  mb-4 py-3 transition duration-200 ease-in-out border rounded-lg hover:scale-110 bg-background-color border-text`}
-                disabled={registrationState === RegistrationState.REGISTERING}
+                disabled={loading}
                 onClick={handleSignInClick}
               >
                 Sign in

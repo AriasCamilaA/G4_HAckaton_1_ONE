@@ -1,5 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+"use client";
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext();
 
@@ -10,29 +12,14 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Supongamos que tienes un endpoint para obtener datos del usuario desde el token
-      fetch('${process.env.NEXT_PUBLIC_API_URL}/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.json())
-        .then(data => {
-          setUser(data.user);
-        });
+      setUser({ token });
     }
   }, []);
 
-  const login = async (email, password) => {
-    const response = await fetch('${process.env.NEXT_PUBLIC_API_URL}/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await response.json();
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      setUser(data.user);
-      router.push('/');
-    }
+  const login = (userData) => {
+    localStorage.setItem('token', userData.token);
+    setUser(userData);
+    router.push('/dashboard');
   };
 
   const logout = () => {
@@ -48,4 +35,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthContext;
+export const useAuth = () => useContext(AuthContext);
