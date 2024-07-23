@@ -74,7 +74,7 @@ Backend Developer 3: Implementación de las rutas y la autenticación de usuario
 
 Wilson Osorio BackEnd 0303_ep - Back 3
 
-Erick Conquera BackEnd crewald7 GUATEMALA - Back 1
+Erick Conquera BackEnd crewald7 GUATEMALA - Back 1 - AUSENTE
 
 Jair Chávez Islas BackEnd Jair0305 MÉXICO - Back 2
 
