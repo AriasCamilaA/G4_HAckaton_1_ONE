@@ -17,6 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("permitAll()")
     @GetMapping("findBy/{idKeycloak}")
     public ResponseEntity<?> getUserByIdKeycloak(@PathVariable String idKeycloak) {
         try {
