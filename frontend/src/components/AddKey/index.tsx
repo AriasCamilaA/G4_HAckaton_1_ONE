@@ -26,7 +26,11 @@ enum KeyState {
   ERROR = "ERROR",
 }
 
-export default function App() {
+interface AddKeyProps {
+  onSuccess: () => void;
+}
+
+export default function AddKey({ onSuccess }: AddKeyProps) {
   const [keyState, setKeyState] = useState<KeyState>(KeyState.NOT_LOADED);
   const { createKey, loading, error } = useCreateKey();
   const { user } = useAuth();
@@ -50,13 +54,13 @@ export default function App() {
     },
   });
 
-  const { register, handleSubmit, formState, setValue } = form;
+  const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
   const onSubmit = async (data: FormValues) => {
     setKeyState(KeyState.LOADING);
-    const selectedService = services.find(s => s.name === data.serviceCategory);
-    const selectedModel = models.find(m => m.name === data.keyModel);
+    const selectedService = services.find(s => s.id === parseInt(data.serviceCategory || ""));
+    const selectedModel = models.find(m => m.id === parseInt(data.keyModel || ""));
 
     const payload = {
       name: data.keyName,
@@ -64,8 +68,8 @@ export default function App() {
       expiresAt: new Date(data.expirationDate).toISOString(),
       createdAt: new Date().toISOString(),
       user: { id: 1 },
-      service: data.serviceCategory ? { id: data.serviceCategory } : null,
-      model: data.keyModel ? { id: data.keyModel } : null,
+      service: selectedService ? { id: selectedService.id } : null,
+      model: selectedModel ? { id: selectedModel.id } : null,
     };
 
     createKey(payload, user?.token)
@@ -78,6 +82,7 @@ export default function App() {
           icon: "success",
         });
         console.log("Key loaded successfully:", data);
+        onSuccess(); // Call onSuccess to refresh the keys in the parent component
       })
       .catch((err) => {
         console.log(err);
@@ -172,7 +177,7 @@ export default function App() {
             isDisabled={servicesLoading || servicesError}
           >
             {services.map((service) => (
-              <SelectItem key={service.id} value={service.id}>
+              <SelectItem key={service.id} value={service.id.toString()}>
                 {service.name}
               </SelectItem>
             ))}
@@ -195,7 +200,7 @@ export default function App() {
             isDisabled={modelsLoading || modelsError}
           >
             {models.map((model) => (
-              <SelectItem key={model.id} value={model.id}>
+              <SelectItem key={model.id} value={model.id.toString()}>
                 {model.name}
               </SelectItem>
             ))}

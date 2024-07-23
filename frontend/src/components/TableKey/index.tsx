@@ -2,7 +2,7 @@
 
 import AddKey from "../../components/AddKey";
 import EditKey from "../../components/EditKey";
-import React from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -22,7 +22,6 @@ import {
   ModalContent,
   ModalBody,
   useDisclosure,
-  Link,
 } from "@nextui-org/react";
 import { PlusIcon } from "./PlusIcon";
 import { SearchIcon } from "./SearchIcon";
@@ -58,25 +57,29 @@ const columns = [
 
 export default function TableKey() {
   const { user } = useAuth(); // Assuming useAuth provides user with a token
-  const [filterValue, setFilterValue] = React.useState("");
-  const [visibleColumns, setVisibleColumns] = React.useState(
+  const [filterValue, setFilterValue] = useState("");
+  const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortDescriptor, setSortDescriptor] = useState({
     column: "name",
     direction: "ascending",
   });
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
-  const [scrollBehavior, setScrollBehavior] = React.useState("inside");
-  const [page, setPage] = React.useState(1);
-  const { keys, loading, error } = useKeys(user?.token); // Pass the bearer token to the custom hook
-  console.log(keys);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [scrollBehavior, setScrollBehavior] = useState("inside");
+  const [page, setPage] = useState(1);
+  const { keys, loading, error, refetch } = useKeys(user?.token); // Pass the bearer token to the custom hook
+
+  const refreshKeys = () => {
+    refetch();
+  };
+
   const openEditModal = () => {
     setIsEditModalOpen(true);
   };
+
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
@@ -85,7 +88,7 @@ export default function TableKey() {
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const headerColumns = React.useMemo(() => {
+  const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
@@ -93,7 +96,7 @@ export default function TableKey() {
     );
   }, [visibleColumns]);
 
-  const filteredItems = React.useMemo(() => {
+  const filteredItems = useMemo(() => {
     let filteredKeys = [...keys];
 
     if (hasSearchFilter) {
@@ -103,16 +106,16 @@ export default function TableKey() {
     }
 
     return filteredKeys;
-  }, [keys, filterValue, statusFilter]);
+  }, [keys, filterValue]);
 
-  const items = React.useMemo(() => {
+  const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
-  const sortedItems = React.useMemo(() => {
+  const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
@@ -138,7 +141,7 @@ export default function TableKey() {
       });
   };
 
-  const renderCell = React.useCallback((key, columnKey) => {
+  const renderCell = useCallback((key, columnKey) => {
     const cellValue = key[columnKey];
 
     switch (columnKey) {
@@ -211,12 +214,12 @@ export default function TableKey() {
     }
   }, []);
 
-  const onRowsPerPageChange = React.useCallback((e) => {
+  const onRowsPerPageChange = useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
+  const onSearchChange = useCallback((value) => {
     if (value) {
       setFilterValue(value);
       setPage(1);
@@ -225,7 +228,7 @@ export default function TableKey() {
     }
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex items-end justify-between gap-3">
@@ -277,6 +280,13 @@ export default function TableKey() {
             >
               Add New
             </Button>
+            <Button
+              className="bg-foreground text-background"
+              size="sm"
+              onPress={refreshKeys}
+            >
+              Refresh
+            </Button>
           </div>
         </div>
         <div className="flex items-center justify-between">
@@ -299,15 +309,13 @@ export default function TableKey() {
     );
   }, [
     filterValue,
-    statusFilter,
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
     keys.length,
-    hasSearchFilter,
   ]);
 
-  const bottomContent = React.useMemo(() => {
+  const bottomContent = useMemo(() => {
     return (
       <div className="flex items-center justify-between px-2 py-2">
         <Pagination
@@ -390,7 +398,7 @@ export default function TableKey() {
             {(onClose) => (
               <>
                 <ModalBody>
-                  <AddKey />
+                  <AddKey onSuccess={refreshKeys} />
                 </ModalBody>
               </>
             )}
