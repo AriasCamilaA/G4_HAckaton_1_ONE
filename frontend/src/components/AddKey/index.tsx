@@ -10,6 +10,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import useModels from "../../logic/hooks/modelos/useModels";
 import useServices from "../../logic/hooks/servicios/useServices";
+import useTokenInfo from "../../logic/hooks/auth/useTokenInfo";
+import useUserDetails from "../../logic/hooks/auth/useUserDetails"; // Import the custom hook
 
 type FormValues = {
   keyName: string;
@@ -37,12 +39,25 @@ export default function AddKey({ onSuccess }: AddKeyProps) {
   const router = useRouter();
   const { models, loading: modelsLoading, error: modelsError } = useModels(user?.token);
   const { services, loading: servicesLoading, error: servicesError } = useServices(user?.token);
+  const { tokenInfo, loading: tokenInfoLoading, error: tokenInfoError } = useTokenInfo(user?.token); // Use the custom hook
+
+  // Get user details based on tokenInfo
+  const userId = tokenInfo?.['subject o idUser'];
+  const { userDetails, loading: userDetailsLoading, error: userDetailsError } = useUserDetails(userId, user?.token);
 
   useEffect(() => {
     if (!user) {
       router.push("/login");
+    } else {
+      console.log("USUARIO", tokenInfo); // Log the token info
     }
-  }, [user, router]);
+  }, [user, router, tokenInfo]);
+
+  useEffect(() => {
+    if (userDetails) {
+      console.log("User Details:", userDetails); // Log the user details
+    }
+  }, [userDetails]);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -58,6 +73,7 @@ export default function AddKey({ onSuccess }: AddKeyProps) {
   const { errors } = formState;
 
   const onSubmit = async (data: FormValues) => {
+    console.log("USUARIO ID", userId); // Log the user ID
     setKeyState(KeyState.LOADING);
     const selectedService = services.find(s => s.id === parseInt(data.serviceCategory || ""));
     const selectedModel = models.find(m => m.id === parseInt(data.keyModel || ""));
@@ -67,7 +83,7 @@ export default function AddKey({ onSuccess }: AddKeyProps) {
       key: data.keyValue,
       expiresAt: new Date(data.expirationDate).toISOString(),
       createdAt: new Date().toISOString(),
-      user: { id: 1 },
+      user: { id: userDetails.id },
       service: selectedService ? { id: selectedService.id } : null,
       model: selectedModel ? { id: selectedModel.id } : null,
     };
