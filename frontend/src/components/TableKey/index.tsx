@@ -1,7 +1,7 @@
 "use client";
 
-import AddKey from '../../components/AddKey';
-import EditKey from '../../components/EditKey';
+import AddKey from "../../components/AddKey";
+import EditKey from "../../components/EditKey";
 import React from "react";
 import {
   Table,
@@ -34,9 +34,17 @@ import { Alert } from "../../utilities";
 import { poppins } from "../../app/fonts";
 import { capitalize } from "./utils";
 import useKeys from "../../logic/hooks/keys/useKeys";
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from "../../contexts/AuthContext";
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "key", "createdAt", "expiresAt", "user", "service", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "key",
+  "createdAt",
+  "expiresAt",
+  "user",
+  "service",
+  "actions",
+];
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
@@ -51,7 +59,9 @@ const columns = [
 export default function TableKey() {
   const { user } = useAuth(); // Assuming useAuth provides user with a token
   const [filterValue, setFilterValue] = React.useState("");
-  const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(INITIAL_VISIBLE_COLUMNS)
+  );
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -78,7 +88,9 @@ export default function TableKey() {
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
 
-    return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
@@ -86,7 +98,7 @@ export default function TableKey() {
 
     if (hasSearchFilter) {
       filteredKeys = filteredKeys.filter((key) =>
-        key.name.toLowerCase().includes(filterValue.toLowerCase()),
+        key.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -111,16 +123,19 @@ export default function TableKey() {
   }, [sortDescriptor, items]);
 
   const copyToClipboard = (key) => {
-    const textToCopy = `Name: ${key.name}\nKey: ${key.key}\nCreated At: ${key.createdAt}\nExpires At: ${key.expiresAt}\nUser: ${key.user.name}\nService: ${key.service.name}`;
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      Alert.fire({
-        title: "Copy key",
-        text: "Key details copied to clipboard.",
-        icon: "success"
+    const textToCopy = key.key; // Solo copia el valor de la key
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        Alert.fire({
+          title: "Copy key",
+          text: "Key copied to clipboard.",
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
       });
-    }).catch((err) => {
-      console.error('Failed to copy: ', err);
-    });
   };
 
   const renderCell = React.useCallback((key, columnKey) => {
@@ -130,56 +145,62 @@ export default function TableKey() {
       case "name":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="capitalize text-bold text-small">{cellValue}</p>
           </div>
         );
       case "key":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="capitalize text-bold text-small">{cellValue}</p>
           </div>
         );
       case "createdAt":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="capitalize text-bold text-small">{cellValue}</p>
           </div>
         );
       case "expiresAt":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="capitalize text-bold text-small">{cellValue}</p>
           </div>
         );
       case "user":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{key.user?.name}</p>
+            <p className="capitalize text-bold text-small">{key.user?.name}</p>
           </div>
         );
       case "service":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{key.service?.name}</p>
+            <p className="capitalize text-bold text-small">
+              {key.service?.name}
+            </p>
           </div>
         );
       case "actions":
         return (
-          <div className="relative flex items-center justify-center gap-2 w-full">
+          <div className="relative flex items-center justify-center w-full gap-2">
             <Tooltip content="Copy key">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() => copyToClipboard(key)}>
+              <span
+                className="text-lg cursor-pointer text-default-400 active:opacity-50"
+                onClick={() => copyToClipboard(key)}
+              >
                 <CopyIcon />
               </span>
             </Tooltip>
             <Tooltip content="Edit key">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={openEditModal}>
+              <span
+                className="text-lg cursor-pointer text-default-400 active:opacity-50"
+                onClick={openEditModal}
+              >
                 <EditIcon />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete key">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <span className="text-lg cursor-pointer text-danger active:opacity-50">
                 <DeleteIcon />
               </span>
             </Tooltip>
@@ -207,7 +228,7 @@ export default function TableKey() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex items-end justify-between gap-3">
           <Input
             isClearable
             classNames={{
@@ -258,8 +279,10 @@ export default function TableKey() {
             </Button>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {keys.length} keys</span>
+        <div className="flex items-center justify-between">
+          <span className="text-default-400 text-small">
+            Total {keys.length} keys
+          </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -286,7 +309,7 @@ export default function TableKey() {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="flex items-center justify-between px-2 py-2">
         <Pagination
           showControls
           classNames={{
@@ -305,7 +328,11 @@ export default function TableKey() {
   return (
     <div className="lg:mx-auto lg:max-w-[56.25rem] 2xl:max-w-[79.25rem] p-5 mx-auto my-[60px] xl:max-w-[71.5rem] w-full">
       <div className="w-full">
-        <h1 className={`${poppins.className} text-3xl font-bold text-center mb-6`}>Key Management</h1>
+        <h1
+          className={`${poppins.className} text-3xl font-bold text-center mb-6`}
+        >
+          Key Management
+        </h1>
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
@@ -335,13 +362,15 @@ export default function TableKey() {
               )}
             </TableHeader>
             <TableBody emptyContent={"No keys found"}>
-              {(sortedItems.length > 0 ? sortedItems : filteredItems).map((key) => (
-                <TableRow key={key.key}>
-                  {(columnKey) => (
-                    <TableCell>{renderCell(key, columnKey)}</TableCell>
-                  )}
-                </TableRow>
-              ))}
+              {(sortedItems.length > 0 ? sortedItems : filteredItems).map(
+                (key) => (
+                  <TableRow key={key.key}>
+                    {(columnKey) => (
+                      <TableCell>{renderCell(key, columnKey)}</TableCell>
+                    )}
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         )}
