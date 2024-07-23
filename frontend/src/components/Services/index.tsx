@@ -38,7 +38,7 @@ const ServiceCard = ({ imgSrc, alt, title, description, link }) => (
       alt={alt}
       width={600}
       height={400}
-      className="w-full h-[200px] lg:h-[188px] xl:h-[300px]"
+      className="w-full h-[200px] lg:h-[188px] xl:h-[300px] object-cover"
     />
     <div className="flex flex-col items-center justify-center mt-[35px]">
       <h3
@@ -55,7 +55,7 @@ const ServiceCard = ({ imgSrc, alt, title, description, link }) => (
         <Link href={link} className={`${montserrat.className} font-medium`}>
           Learn More
         </Link>
-        <img src="/ArrowRight.svg" alt="Arrow Right" />
+        <Image className="w-6" src="/ArrowRight.svg" alt="Arrow Right" width={24} height={24} />
       </div>
     </div>
   </div>

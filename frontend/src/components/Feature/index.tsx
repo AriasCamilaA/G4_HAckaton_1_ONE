@@ -49,7 +49,7 @@ export default function Feature() {
             alt="feature"
             width={600}
             height={400}
-            className="w-full md:h-[509px] lg:w-[511px] xl:w-full "
+            className="w-full md:h-[509px] lg:w-[511px] xl:w-full object-cover"
           />
         </div>
       </div>

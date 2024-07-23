@@ -63,19 +63,38 @@ export default function TableKey() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [sortDescriptor, setSortDescriptor] = useState({
+
+  type ScrollBehavior = "inside" | "normal" | "outside";
+
+  const scrollBehavior: ScrollBehavior = "inside";
+
+  type SortDirection = "ascending" | "descending";
+
+  const [sortDescriptor, setSortDescriptor] = useState<{ column: string; direction: SortDirection }>({
     column: "name",
     direction: "ascending",
   });
+
+  interface SortDescriptor {
+    column: string;
+    direction: SortDirection;
+  }
+
+  const handleSortChange = (descriptor: SortDescriptor) => {
+    setSortDescriptor(descriptor);
+  };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [scrollBehavior, setScrollBehavior] = useState("inside");
   const [page, setPage] = useState(1);
   const { keys, loading, error, refetch } = useKeys(user?.token); // Pass the bearer token to the custom hook
 
   const { deleteKey } = useDeleteKey(); // Use the deleteKey hook
 
   const [currentKey, setCurrentKey] = useState(null); // State to store the current key being edited
+
+  const handleSelectionChange = (selectedKeys: Set<string>) => {
+    setVisibleColumns(selectedKeys);
+  };
 
   const refreshKeys = () => {
     refetch();
@@ -91,7 +110,7 @@ export default function TableKey() {
     setCurrentKey(null);
   };
 
-  const handleDelete = async (keyId) => {
+  const handleDelete = useCallback(async (keyId) => {
     const result = await Alert.fire({
       title: "Delete key",
       text: "Are you sure you want to delete this key?",
@@ -117,14 +136,14 @@ export default function TableKey() {
         });
       }
     }
-  };
+  }, [deleteKey, user?.token]);
 
   const pages = Math.ceil(keys.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (visibleColumns.size === 0) return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
@@ -158,7 +177,7 @@ export default function TableKey() {
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
+  }, [sortDescriptor, items, refreshKeys, onOpen]);
 
   const copyToClipboard = (key) => {
     const textToCopy = key.key; // Solo copia el valor de la key
@@ -301,7 +320,7 @@ export default function TableKey() {
                 closeOnSelect={false}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
+                onSelectionChange={handleSelectionChange}
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
@@ -312,7 +331,6 @@ export default function TableKey() {
             </Dropdown>
             <Button
               className="bg-foreground text-background"
-              endContent={<PlusIcon />}
               size="sm"
               onPress={onOpen}
             >
@@ -394,7 +412,7 @@ export default function TableKey() {
               th: "bg-transparent text-small text-default-500 font-normal",
             }}
             sortDescriptor={sortDescriptor}
-            onSortChange={setSortDescriptor}
+            onSortChange={handleSortChange}
           >
             <TableHeader columns={headerColumns}>
               {(column) => (

@@ -31,17 +31,32 @@ export default function TableLogs() {
   const [visibleColumns, setVisibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+
+  type SortDirection = "ascending" | "descending";
+
+  const [sortDescriptor, setSortDescriptor] = React.useState<{ column: string; direction: SortDirection }>({
+    column: "name",
     direction: "ascending",
   });
 
+  interface SortDescriptor {
+    column: string;
+    direction: SortDirection;
+  }
+  
+  const handleSortChange = (descriptor: SortDescriptor) => {
+    setSortDescriptor(descriptor);
+  };
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
   const [scrollBehavior, setScrollBehavior] = React.useState("inside");
 
   const openEditModal = () => {
     setIsEditModalOpen(true);
+  };
+
+  const handleSelectionChange = (selectedKeys: Set<string>) => {
+    setVisibleColumns(selectedKeys);
   };
 
   const closeEditModal = () => {
@@ -54,7 +69,7 @@ export default function TableLogs() {
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
+    if (visibleColumns.size === 0) return columns;
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
   }, [visibleColumns]);
@@ -67,12 +82,7 @@ export default function TableLogs() {
         user.keyname.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.expirationdate),
-      );
-    }
-
+    
     return filteredUsers;
   }, [logs, filterValue, statusFilter]);
 
@@ -179,7 +189,7 @@ export default function TableLogs() {
                 closeOnSelect={false}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
+                onSelectionChange={handleSelectionChange}
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
@@ -249,7 +259,7 @@ export default function TableLogs() {
             th: "bg-transparent text-small text-default-500 font-normal",
           }}
           sortDescriptor={sortDescriptor}
-          onSortChange={setSortDescriptor}
+          onSortChange={handleSortChange}
         >
           <TableHeader columns={headerColumns}>
             {(column) => (

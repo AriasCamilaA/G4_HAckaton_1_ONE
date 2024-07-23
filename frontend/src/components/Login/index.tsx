@@ -7,6 +7,7 @@ import { poppins } from "../../app/fonts";
 import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
 import useAuth from "../../logic/hooks/auth/useAuth";
+import Image from 'next/image'; 
 
 type FormValues = {
   username: string;
@@ -80,7 +81,13 @@ export default function Login() {
       <div className="flex justify-start pt-4 absolute-position">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-            <img className="w-8" src="/logo.svg" alt="logo" />
+          <Image
+              className="w-8"
+              src="/logo.svg"
+              alt="logo"
+              width={32} 
+              height={32}
+            />
             <span
               className={`${poppins.className} text-text font-medium text-sm md:text-base`}
             >

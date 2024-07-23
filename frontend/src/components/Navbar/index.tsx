@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { poppins } from "../../app/fonts";
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -44,7 +45,13 @@ export default function Navbar() {
       <nav className="flex items-center justify-between lg:mx-auto 2xl:max-w-[92.25rem]">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-            <img className="w-8" src="/logo.svg" alt="logo" />
+          <Image
+              className="w-8"
+              src="/logo.svg"
+              alt="logo"
+              width={32} 
+              height={32}
+            />
             <span
               className={`${poppins.className} font-medium text-sm md:text-base`}
             >
@@ -58,7 +65,7 @@ export default function Navbar() {
           onClick={toggleMenu}
           aria-label="Open menu"
         >
-          <img className="md:w-7" src="/hamburger.svg" alt="Hamburger icon" />
+          <Image className="md:w-7" src="/hamburger.svg" alt="Hamburger icon" width={28} height={28} />
         </button>
 
         <button
@@ -66,7 +73,7 @@ export default function Navbar() {
           onClick={toggleMenu}
           aria-label="Close menu"
         >
-          <img src="/closeHamburguer.svg" alt="Close menu icon" />
+          <Image src="/closeHamburguer.svg" alt="Close menu icon" width={28} height={28} />
         </button>
 
         <div
@@ -118,14 +125,14 @@ export default function Navbar() {
           <div className="mt-[224px] lg:hidden">
             <span className={`${poppins.className} text-text`}>Follow Us</span>
             <div className="flex gap-3 mt-4">
-              <a className="flex items-center justify-center w-8 h-8" href="#">
-                <img src="/facebook.svg" alt="facebook social" />
+            <a className="flex items-center justify-center w-8 h-8" href="#">
+                <Image src="/facebook.svg" alt="facebook social" width={32} height={32} />
               </a>
               <a className="flex items-center justify-center w-8 h-8" href="#">
-                <img src="/instagram.svg" alt="instagram social" />
+                <Image src="/instagram.svg" alt="instagram social" width={32} height={32} />
               </a>
               <a className="flex items-center justify-center w-8 h-8" href="#">
-                <img src="twitter.svg" alt="twitter social" />
+                <Image src="/twitter.svg" alt="twitter social" width={32} height={32} />
               </a>
             </div>
           </div>
