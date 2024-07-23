@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { adaptService } from '../adapters/serviceAdapter';
+// import { adaptService } from '../adapters/serviceAdapter';
 
 const useServices = (bearer) => {
   const [services, setServices] = useState([]);
@@ -15,7 +15,7 @@ const useServices = (bearer) => {
           }
         });
         const data = await response.json();
-        setServices(data.map(adaptService));
+        setServices(data);
       } catch (err) {
         setError(err);
       } finally {
