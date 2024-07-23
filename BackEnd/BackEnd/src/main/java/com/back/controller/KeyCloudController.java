@@ -66,7 +66,8 @@ public class KeyCloudController {
         return ResponseEntity.created(new URI("/keycloak/user/create")).body(response);
     }
 
-    @PreAuthorize("hasRole('${swagger.role.admin}')")
+//    @PreAuthorize("hasRole('${swagger.role.admin}')")
+    @PreAuthorize("permitAll()")
     @DeleteMapping("delete/{username}")
     @Operation(
             summary = "Delete user",

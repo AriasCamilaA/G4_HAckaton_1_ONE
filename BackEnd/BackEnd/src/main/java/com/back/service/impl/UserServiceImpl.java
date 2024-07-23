@@ -50,4 +50,15 @@ public class UserServiceImpl implements UserService {
     public User findByIdKeycloak(String idKeycloak) {
         return userRepository.findByIdKeycloak(idKeycloak);
     }
+
+    @Override
+    public void deleteByIdKeycloak(String idKeycloak) {
+        userRepository.deleteByIdKeycloak(idKeycloak);
+    }
+
+    @Override
+    public User findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
 }

@@ -8,7 +8,6 @@ import com.back.service.UserService;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.mapper.Mapper;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.admin.client.resource.UserResource;
@@ -19,6 +18,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -167,12 +167,18 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteUser(String username) {
         try {
-            UserRepresentation user = searchUserByUsername(username);
-            keyCloud.getUserResource().get(user.getId()).remove();
-            log.info("User {} deleted successfully", username);
+            String userId = searchUserByUsername(username).getId();
+            if (userId != null) {
+                keyCloud.getUserResource()
+                        .get(userId)
+                        .remove();
+                userService.deleteByIdKeycloak(userId);
+                log.info("User {} deleted successfully", username);
+            }
         } catch (RuntimeException e) {
             log.error("Error deleting user {}: {}", username, e.getMessage());
             throw new RuntimeException("Error deleting user: " + e.getMessage(), e);
@@ -181,15 +187,32 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
 
     @Override
     public void updateUser(User user) {
-        UserRepresentation use = searchUserByUsername(user.username());
-        CredentialRepresentation credentialRepresentation = getCredentialRepresentation(user);
+        try {
+            // Buscar usuario por nombre de usuario
+            UserRepresentation existingUser = searchUserByUsername(user.username());
+            Long idUserDB = userService.findByIdKeycloak(existingUser.getId()).getId();
+            if (existingUser == null) {
+                throw new RuntimeException("User not found: " + user.username());
+            }
+            CredentialRepresentation credentialRepresentation = getCredentialRepresentation(user);
+            UserRepresentation userRepresentation = getUserRepresentation(user);
+            userRepresentation.setCredentials(List.of(credentialRepresentation));
+            UserResource usersResource = keyCloud.getUserResource().get(existingUser.getId());
+            assignRoles(user, keyCloud.getRealmResource(), existingUser.getId());
+            builders = com.back.model.entities.User.builder()
+                    .name(user.firstName())
+                    .email(user.email())
+                    .idKeycloak(userRepresentation.getId())
+                    .roles(user.roles())
+                    .build();
+            userService.updateUser(idUserDB, builders);
+            usersResource.update(userRepresentation);
 
-        UserRepresentation userRepresentation = getUserRepresentation(user);
-        userRepresentation.setCredentials(List.of(credentialRepresentation));
-
-        UserResource usersResource = keyCloud.getUserResource().get(use.getId());
-        assignRoles(user, keyCloud.getRealmResource(), use.getId());
-        usersResource.update(userRepresentation);
+            log.info("User {} updated successfully", user.username());
+        } catch (RuntimeException e) {
+            log.error("Error updating user {}: {}", user.username(), e.getMessage());
+            throw new RuntimeException("Error updating user: " + e.getMessage(), e);
+        }
     }
 
     private static CredentialRepresentation getCredentialRepresentation(User user) {

@@ -9,10 +9,20 @@ import java.util.Optional;
 @Service
 public interface UserService {
     User createUser(User user);
+
     Optional<User> getUserById(Long id);
+
     List<User> getAllUsers();
+
     User updateUser(Long id, User userDetails);
+
     void deleteUser(Long id);
+
     User findByIdKeycloak(String idKeycloak);
+
+    void deleteByIdKeycloak(String idKeycloak);
+
+    User findByName(String name);
+
 
 }
