@@ -72,16 +72,20 @@ export default function TableKey() {
   const [page, setPage] = useState(1);
   const { keys, loading, error, refetch } = useKeys(user?.token); // Pass the bearer token to the custom hook
 
+  const [currentKey, setCurrentKey] = useState(null); // State to store the current key being edited
+
   const refreshKeys = () => {
     refetch();
   };
 
-  const openEditModal = () => {
+  const openEditModal = (key) => {
+    setCurrentKey(key);
     setIsEditModalOpen(true);
   };
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
+    setCurrentKey(null);
   };
 
   const pages = Math.ceil(keys.length / rowsPerPage);
@@ -197,7 +201,7 @@ export default function TableKey() {
             <Tooltip content="Edit key">
               <span
                 className="text-lg cursor-pointer text-default-400 active:opacity-50"
-                onClick={openEditModal}
+                onClick={() => openEditModal(key)}
               >
                 <EditIcon />
               </span>
@@ -420,7 +424,24 @@ export default function TableKey() {
             {(onClose) => (
               <>
                 <ModalBody>
-                  <EditKey />
+                  {currentKey && (
+                    <EditKey
+                      keyId={currentKey.id}
+                      initialData={{
+                        keyName: currentKey.name,
+                        keyValue: currentKey.key,
+                        expirationDate: currentKey.expiresAt.split("T")[0],
+                        serviceCategory: currentKey.service?.id.toString() || "",
+                        keyModel: currentKey.model?.id.toString() || "",
+                        createdAt: currentKey.createdAt,
+                        user: currentKey.user,
+                      }}
+                      onSuccess={() => {
+                        refreshKeys();
+                        closeEditModal();
+                      }}
+                    />
+                  )}
                 </ModalBody>
               </>
             )}

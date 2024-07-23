@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Button, Select, SelectItem } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import { poppins } from "../../app/fonts";
 import { Alert } from "../../utilities";
+import { useAuth } from "../../contexts/AuthContext";
+import useUpdateKey from "../../logic/hooks/keys/useUpdateKey";
+import useModels from "../../logic/hooks/modelos/useModels";
+import useServices from "../../logic/hooks/servicios/useServices";
 
 type FormValues = {
   keyName: string;
@@ -21,84 +25,63 @@ enum KeyState {
   ERROR = "ERROR",
 }
 
-const serviceCategories = [
-  "Cohere",
-  "Ngrok",
-  "OpenAI",
-  "IBM Watson",
-  "Google Cloud AI",
-  "Microsoft Azure Cognitive Services",
-  "Hugging Face",
-  "DeepAI",
-  "Clarifai",
-  "Algolia",
-  "Twilio",
-  "Amazon Rekognition",
-  "Speechmatics",
-  "OpenCV AI Kit (OAK)",
-  "Vize.ai",
-  "TextRazor",
-  "MonkeyLearn",
-  "AssemblyAI",
-];
-
-const keyModels = [
-  "LLM Models",
-  "Image Generation Models",
-  "Image Processing Models",
-  "Audio and Voice Analysis Models",
-  "Video Processing Models",
-  "Text Analysis Models",
-  "Facial Analysis and Recognition Models",
-  "Image Classification Models",
-  "Sentiment Analysis Models",
-  "Natural Language Processing (NLP) Models",
-  "Document Analysis Models",
-  "Image Classification Models",
-  "Document Analysis Models",
-  "Natural Language Processing (NLP) Models",
-];
-
-export default function EditKey() {
+export default function EditKey({ keyId, initialData, onSuccess }) {
   const [keyState, setKeyState] = useState<KeyState>(KeyState.NOT_LOADED);
+  const { user } = useAuth();
+  const { updateKey, loading, error } = useUpdateKey();
+  const { models, loading: modelsLoading, error: modelsError } = useModels(user?.token);
+  const { services, loading: servicesLoading, error: servicesError } = useServices(user?.token);
+
   const form = useForm<FormValues>({
     defaultValues: {
-      keyName: "",
-      keyValue: "",
-      expirationDate: "",
-      serviceCategory: "",
-      keyModel: "",
+      keyName: initialData.keyName || "",
+      keyValue: initialData.keyValue || "",
+      expirationDate: initialData.expirationDate || "",
+      serviceCategory: initialData.serviceCategory || "",
+      keyModel: initialData.keyModel || "",
     },
   });
 
-  const { register, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState, setValue } = form;
   const { errors } = formState;
+
+  useEffect(() => {
+    if (initialData) {
+      setValue("keyName", initialData.keyName || "");
+      setValue("keyValue", initialData.keyValue || "");
+      setValue("expirationDate", initialData.expirationDate || "");
+      setValue("serviceCategory", initialData.serviceCategory || "");
+      setValue("keyModel", initialData.keyModel || "");
+    }
+  }, [initialData, setValue]);
 
   const onSubmit = async (data: FormValues) => {
     setKeyState(KeyState.LOADING);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setKeyState(KeyState.LOADED);
-      console.log(
-        "Key loaded successfully:",
-        data.keyName,
-        data.keyValue,
-        data.expirationDate,
-        data.serviceCategory,
-        data.keyModel
-      );
+    const selectedService = services.find(s => s.id === parseInt(data.serviceCategory || ""));
+    const selectedModel = models.find(m => m.id === parseInt(data.keyModel || ""));
 
+    const payload = {
+      name: data.keyName,
+      key: data.keyValue,
+      expiresAt: new Date(data.expirationDate).toISOString(),
+      service: selectedService ? { id: selectedService.id } : null,
+      model: selectedModel ? { id: selectedModel.id } : null,
+      createdAt: initialData.createdAt,
+      user: initialData.user,
+    };
+
+    try {
+      await updateKey(keyId, payload, user?.token);
+      setKeyState(KeyState.LOADED);
       Alert.fire({
         title: "Edit key",
         text: "Successful update",
         icon: "success",
       });
-    } catch (error) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      onSuccess();
+    } catch (err) {
       setKeyState(KeyState.ERROR);
-      console.error("Error loading key:", error);
-
       Alert.fire({
         title: "Edit key",
         text: "Something has gone wrong.",
@@ -111,9 +94,7 @@ export default function EditKey() {
 
   return (
     <div className="mt-4 mb-4">
-      <h1
-        className={`${poppins.className} text-3xl font-bold text-center mb-3`}
-      >
+      <h1 className={`${poppins.className} text-3xl font-bold text-center mb-3`}>
         Edit key
       </h1>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -129,9 +110,7 @@ export default function EditKey() {
             })}
           />
           {errors.keyName && (
-            <p
-              className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
-            >
+            <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
               {errors.keyName.message}
             </p>
           )}
@@ -148,9 +127,7 @@ export default function EditKey() {
             })}
           />
           {errors.keyValue && (
-            <p
-              className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
-            >
+            <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
               {errors.keyValue.message}
             </p>
           )}
@@ -172,57 +149,51 @@ export default function EditKey() {
             })}
           />
           {errors.expirationDate && (
-            <p
-              className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
-            >
+            <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
               {errors.expirationDate.message}
             </p>
           )}
         </div>
         <div className="w-full mb-4">
           <Select
-            isRequired
             label="Service Category"
             placeholder="Select service category"
             className={`${poppins.className} w-full`}
-            {...register("serviceCategory", {
-              required: "Service category is required",
-            })}
+            {...register("serviceCategory")}
+            isLoading={servicesLoading}
+            isDisabled={servicesLoading || servicesError}
+            value={initialData.serviceCategory}
           >
-            {serviceCategories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
+            {services.map((service) => (
+              <SelectItem key={service.id} value={service.id.toString()}>
+                {service.name}
               </SelectItem>
             ))}
           </Select>
           {errors.serviceCategory && (
-            <p
-              className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
-            >
+            <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
               {errors.serviceCategory.message}
             </p>
           )}
         </div>
         <div className="w-full mb-4">
           <Select
-            isRequired
             label="Key Model"
             placeholder="Select key model"
             className={`${poppins.className} w-full`}
-            {...register("keyModel", {
-              required: "Key model is required",
-            })}
+            {...register("keyModel")}
+            isLoading={modelsLoading}
+            isDisabled={modelsLoading || modelsError}
+            value={initialData.keyModel || ""}
           >
-            {keyModels.map((model) => (
-              <SelectItem key={model} value={model}>
-                {model}
+            {models.map((model) => (
+              <SelectItem key={model.id} value={model.id.toString()}>
+                {model.name}
               </SelectItem>
             ))}
           </Select>
           {errors.keyModel && (
-            <p
-              className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}
-            >
+            <p className={`${poppins.className} ml-3 text-red-500 text-xs mt-1 text-left`}>
               {errors.keyModel.message}
             </p>
           )}
