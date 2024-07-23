@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@nextui-org/react";
 import { poppins, montserrat } from "../../app/fonts";
 import { Alert } from "../../utilities";
+import Image from 'next/image';
 
 const CategoryCard = ({ title, keys }) => {
   const openAlert = () => {
@@ -24,7 +25,9 @@ const CategoryCard = ({ title, keys }) => {
               {keys.length} AI keys
             </span>
           </div>
-          <img className="w-6" src="ArrowRight.svg" alt="Arrow Icon" onClick={openAlert}/>
+          <div className="w-6" onClick={openAlert} style={{ cursor: 'pointer' }}>
+            <Image src="/ArrowRight.svg" alt="Arrow Icon" width={24} height={24} />
+          </div>
         </div>
       </Card>
     </div>

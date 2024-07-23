@@ -15,7 +15,7 @@ export default function Testimonials() {
             alt="Profile"
             width={600}
             height={400}
-            className="w-full h-[509px] lg:w-[511px] xl:h-[700px] xl:w-full"
+            className="w-full h-[509px] lg:w-[511px] xl:h-[700px] xl:w-full object-cover"
           />
         </div>
 

@@ -7,6 +7,7 @@ import { poppins } from "../../app/fonts";
 import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
 import useRegister from "../../logic/hooks/auth/useRegister";
+import Image from 'next/image';
 
 type FormValues = {
   username: string;
@@ -95,7 +96,13 @@ export default function Registration() {
       <div className="absolute top-0 left-0 z-10 px-5 pt-4">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-            <img className="w-8" src="/logo.svg" alt="logo" />
+            <Image
+              className="w-8"
+              src="/logo.svg"
+              alt="logo"
+              width={32} 
+              height={32}
+            />
             <span
               className={`${poppins.className} text-text font-medium text-sm md:text-base`}
             >

@@ -38,7 +38,7 @@ export default function Dashboard() {
     };
 
     validateSession();
-  }, []);
+  }, [router]);
 
   return (
     <div>

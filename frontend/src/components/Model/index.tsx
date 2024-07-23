@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { poppins, montserrat } from "../../app/fonts";
 import { Card, Link } from "@nextui-org/react";
+import Image from 'next/image'; // Importar el componente Image
 
 const modelsData = [
   { href: "#", title: "LLM Models (Large Language Models)", keys: 20 },
@@ -34,16 +35,22 @@ const ModelCard = ({ href, title, keys }) => (
           {keys} AI keys
         </span>
       </div>
-      <img className="w-6" src="ArrowRight.svg" alt="Arrow Icon" />
+      <Image
+        className="w-6"
+        src="/ArrowRight.svg"
+        alt="Arrow Icon"
+        width={24} 
+        height={24} 
+      />
     </Card>
   </Link>
 );
 
-export default function models() {
+export default function Models() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortCriteria, setSortCriteria] = useState("name");
 
-  const filteredmodels = modelsData
+  const filteredModels = modelsData
     .filter((model) =>
       model.title.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -87,7 +94,7 @@ export default function models() {
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredmodels.map((model, index) => (
+        {filteredModels.map((model, index) => (
           <ModelCard
             key={index}
             href={model.href}

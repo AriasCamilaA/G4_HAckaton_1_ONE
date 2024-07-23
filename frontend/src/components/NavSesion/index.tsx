@@ -6,6 +6,7 @@ import { Link } from "@nextui-org/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { Alert } from "../../utilities";
+import Image from 'next/image';
 
 export default function NavSesion() {
   const { logout } = useAuth();
@@ -39,7 +40,13 @@ export default function NavSesion() {
         <div>
           <Link href="/Dashboard">
             <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-              <img className="w-8" src="/logo.svg" alt="logo" />
+            <Image
+              className="w-8"
+              src="/logo.svg"
+              alt="logo"
+              width={32} 
+              height={32}
+            />
               <span
                 className={`${poppins.className} text-text font-medium text-sm md:text-base`}
               >

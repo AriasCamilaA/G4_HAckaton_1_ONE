@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { poppins } from "../../app/fonts";
 import { useRouter } from 'next/navigation';
 import { Alert } from "../../utilities";
+import Image from 'next/image';
 
 type FormValues = {
   email: string;
@@ -69,7 +70,13 @@ export default function Recover() {
       <div className="absolute top-0 left-0 p-4 z-10">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-            <img className="w-8" src="/logo.svg" alt="logo" />
+            <Image
+              className="w-8"
+              src="/logo.svg"
+              alt="logo"
+              width={32} 
+              height={32}
+            />
             <span className={`${poppins.className} text-text font-medium text-sm md:text-base`}>
               KeyCzar
             </span>
