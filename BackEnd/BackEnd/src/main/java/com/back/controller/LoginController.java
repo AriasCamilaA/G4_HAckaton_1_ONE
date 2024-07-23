@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/keycloud")
 @RequiredArgsConstructor
-@Slf4j
 public class LoginController {
 
     private final IKeyCloudService iKeyCloudService;
@@ -32,8 +31,6 @@ public class LoginController {
             String name = request.getUsername();
             String password = request.getPassword();
             JwtResponse jwtResponse = iKeyCloudService.login(name, password);
-//            log.info(AuthService.getAuthenticatedUserId());
-//            log.info(AuthService.getAuthenticatedUsername());
             return ResponseEntity.ok(jwtResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");

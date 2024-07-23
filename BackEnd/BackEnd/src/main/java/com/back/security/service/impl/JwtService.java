@@ -33,23 +33,12 @@ public class JwtService {
         claims.put("lastName", decodedJWT.getClaim("family_name").asString());
         claims.put("email", decodedJWT.getClaim("email").asString());
 
-        // Mapea los roles
-//        Map<String, Object> realmAccess = decodedJWT.getClaim("realm_access").asMap();
-//        if (realmAccess != null) {
-//            claims.put("realmRoles", realmAccess.get("roles"));
-//        }
-
         Map<String, Object> resourceAccess = decodedJWT.getClaim("resource_access").asMap();
         if (resourceAccess != null) {
             claims.put("resourceAccess", resourceAccess);
         }
-
         return claims;
     }
 
-    public Object getClaim(String token, String claimName) {
-        DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim(claimName).as(Object.class);
-    }
 }
 
