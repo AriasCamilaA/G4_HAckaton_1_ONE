@@ -190,7 +190,7 @@ public class KeyCloudServiceImpl implements IKeyCloudService {
         try {
             // Buscar usuario por nombre de usuario
             UserRepresentation existingUser = searchUserByUsername(user.username());
-            Long idUserDB = userService.findByIdKeycloak(existingUser.getId()).getId();
+            String idUserDB = userService.findByIdKeycloak(existingUser.getId()).getIdKeycloak();
             if (existingUser == null) {
                 throw new RuntimeException("User not found: " + user.username());
             }

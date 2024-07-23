@@ -2,7 +2,6 @@ package com.back.controller;
 
 import com.back.config.SwaggerConfig;
 import com.back.security.service.IKeyCloudService;
-import com.back.security.util.AuthService;
 import com.back.security.util.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,10 +33,7 @@ public class KeyCloudController {
             description = "Get all users from the keycloak server"
     )
     public ResponseEntity<?> findAllUsers() {
-                    log.info(AuthService.getAuthenticatedUserId());
-            log.info(AuthService.getAuthenticatedUsername());
         return ResponseEntity.ok(keyCloudService.findAllUsers());
-
     }
 
     @PreAuthorize("permitAll()")
@@ -66,7 +62,7 @@ public class KeyCloudController {
         return ResponseEntity.created(new URI("/keycloak/user/create")).body(response);
     }
 
-//    @PreAuthorize("hasRole('${swagger.role.admin}')")
+    //    @PreAuthorize("hasRole('${swagger.role.admin}')")
     @PreAuthorize("permitAll()")
     @DeleteMapping("delete/{username}")
     @Operation(
@@ -82,7 +78,8 @@ public class KeyCloudController {
         }
     }
 
-    @PreAuthorize("hasRole('${swagger.role.admin}')")
+    //    @PreAuthorize("hasRole('${swagger.role.admin}')")
+    @PreAuthorize("permitAll()")
     @PutMapping("update/user")
     @Operation(
             summary = "Update user",

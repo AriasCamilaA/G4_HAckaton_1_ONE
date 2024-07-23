@@ -5,16 +5,13 @@ import com.back.security.jwt.JwtAuthorizationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-//@Profile(value = {"dev", "prod"})
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -36,7 +33,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/api/keycloud/login").permitAll()
                         .requestMatchers("/api/keycloud/create").permitAll()
-                        .requestMatchers("/api/keycloud/delete/").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))

@@ -3,7 +3,7 @@ package com.back.controller;
 import com.back.model.entities.Key;
 import com.back.model.entities.projection.IkeyDTO;
 import com.back.service.KeyService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/keys")
+@RequiredArgsConstructor
 public class KeyController {
 
-    @Autowired
-    private KeyService keyService;
+    private final KeyService keyService;
 
     @PostMapping
     @PreAuthorize("permitAll()")

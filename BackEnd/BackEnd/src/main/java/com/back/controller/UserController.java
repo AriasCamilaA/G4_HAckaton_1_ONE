@@ -2,7 +2,8 @@ package com.back.controller;
 
 import com.back.model.entities.User;
 import com.back.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,12 +12,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @PostMapping
+    @GetMapping("findBy/{idKeycloak}")
+    public ResponseEntity<?> getUserByIdKeycloak(@PathVariable String idKeycloak) {
+        try {
+            User user = userService.findByIdKeycloak(idKeycloak);
+            System.out.println(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with idKeycloak: " + idKeycloak);
+        }
+    }
+//    @PostMapping
     @PreAuthorize("false")
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
@@ -46,9 +57,9 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
+//    @PutMapping("/{id}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User userDetails) {
         try {
             User updatedUser = userService.updateUser(id, userDetails);
             return ResponseEntity.ok(updatedUser);
@@ -57,7 +68,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
+//    @DeleteMapping("/{id}")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {

@@ -31,14 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, User userDetails) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setName(userDetails.getName());
-                    user.setEmail(userDetails.getEmail());
-                    user.setRoles(userDetails.getRoles());
-                    return userRepository.save(user);
-                }).orElseThrow(() -> new RuntimeException("User not found with id " + id));
+    public User updateUser(String idKeyCloak, User userDetails) {
+        User userAux =  userRepository.findByIdKeycloak(idKeyCloak);
+                userAux.setName(userDetails.getName());
+                userAux.setRoles(userDetails.getRoles());
+                userAux.setEmail(userDetails.getEmail());
+        return userRepository.save(userAux);
     }
 
     @Override

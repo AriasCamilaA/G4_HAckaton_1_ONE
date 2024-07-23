@@ -2,17 +2,17 @@ package com.back.controller;
 
 import com.back.model.entities.Model;
 import com.back.service.ModelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/models")
+@RequiredArgsConstructor
 public class ModelController {
 
-    @Autowired
-    private ModelService modelService;
+    private final ModelService modelService;
 
     @PostMapping
     @PreAuthorize("permitAll()")

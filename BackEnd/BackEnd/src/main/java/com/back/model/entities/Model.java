@@ -1,6 +1,5 @@
 package com.back.model.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,4 @@ public class Model {
     @Column(columnDefinition = "TEXT")
     private String script;
 
-//    @ManyToOne
-//    @JoinColumn(name = "key_id", nullable = false)
-//    private Key key;
 }

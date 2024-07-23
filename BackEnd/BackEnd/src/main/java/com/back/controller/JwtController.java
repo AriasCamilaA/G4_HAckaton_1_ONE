@@ -26,10 +26,12 @@ public class JwtController {
     public ResponseEntity<Map<String, ?>> getTokenInfo(@RequestHeader("Authorization") String authorizationHeader) {
 
         try {
-            String token = authorizationHeader.substring(7); // Remove "Bearer " from the header
+
+            String token = authorizationHeader.split(" ")[1];
             Map<String, Object> tokenInfo = jwtService.decodeToken(token);
             return ResponseEntity.ok(tokenInfo);
         } catch (Exception e) {
+
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Invalid token");
             errorResponse.put("message", "The provided token is invalid or expired.");
