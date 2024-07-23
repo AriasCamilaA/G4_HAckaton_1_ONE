@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface KeyRepository extends JpaRepository<Key, Long> {
+public interface KeyRepository extends IGenericRepo<Key, Long> {
 
     @Query("SELECT k.id as id, k.name as name, k.key as key, k.createdAt " +
             "as createdAt, k.expiresAt as expiresAt, s as service " +

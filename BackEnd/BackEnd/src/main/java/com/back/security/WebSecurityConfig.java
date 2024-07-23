@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-//@Profile(value = {"dev", "prod"})
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -36,7 +35,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/api/keycloud/login").permitAll()
                         .requestMatchers("/api/keycloud/create").permitAll()
-                        .requestMatchers("/api/keycloud/delete/").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))

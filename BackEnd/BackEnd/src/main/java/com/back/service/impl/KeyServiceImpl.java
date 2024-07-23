@@ -59,7 +59,7 @@ public class KeyServiceImpl implements KeyService {
                         key.setCreatedAt(keyDetails.getCreatedAt());
                         key.setExpiresAt(keyDetails.getExpiresAt());
                         key.setService(keyDetails.getService());
-                        key.setUser(keyDetails.getUser());
+//                        key.setUser(keyDetails.getUser());
                         return keyRepository.save(key);
                     }).orElseThrow(() -> new RuntimeException("Key not found with id " + id));
         } catch (Exception e) {

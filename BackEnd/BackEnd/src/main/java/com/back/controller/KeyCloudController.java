@@ -34,10 +34,7 @@ public class KeyCloudController {
             description = "Get all users from the keycloak server"
     )
     public ResponseEntity<?> findAllUsers() {
-        log.info(AuthService.getAuthenticatedUserId());
-        log.info(AuthService.getAuthenticatedUsername());
         return ResponseEntity.ok(keyCloudService.findAllUsers());
-
     }
 
     @PreAuthorize("permitAll()")

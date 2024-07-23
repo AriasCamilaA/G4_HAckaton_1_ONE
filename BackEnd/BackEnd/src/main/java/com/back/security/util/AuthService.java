@@ -12,13 +12,18 @@ public class AuthService {
 
     public static String getAuthenticatedUserId() {
 
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info(jwt.getTokenValue());
+        Jwt jwt = (Jwt) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
         return jwt.getSubject();  // Este es el Keycloak ID
     }
 
     public static String getAuthenticatedUsername() {
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Jwt jwt = (Jwt) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
         return jwt.getClaim("preferred_username");  // Este es el username
     }
 }

@@ -19,8 +19,8 @@ import java.util.stream.Stream;
 @Component
 public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-
-    private final JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    private final JwtGrantedAuthoritiesConverter authoritiesConverter
+            = new JwtGrantedAuthoritiesConverter();
 
     @Value("${jwt.attribute}")
     private String attribute;
@@ -31,7 +31,8 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt source) {
         Collection<GrantedAuthority> authorities =
-                Stream.concat(authoritiesConverter.convert(source).stream(),
+                Stream.concat(
+                        authoritiesConverter.convert(source).stream(),
                                 extractRoles(source).stream())
                         .toList();
 
@@ -47,6 +48,7 @@ public class JwtAuthenticationConverter implements Converter<Jwt, AbstractAuthen
     }
 
     private Collection<? extends GrantedAuthority> extractRoles(Jwt source) {
+
         Map<String, Object> resourceAccess = source.getClaim("resource_access");
         if (resourceAccess == null) {
             return Set.of();
