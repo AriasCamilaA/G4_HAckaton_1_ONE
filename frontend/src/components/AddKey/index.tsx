@@ -8,13 +8,15 @@ import { Alert } from "../../utilities";
 import useCreateKey from "../../logic/hooks/keys/useCreateKey";
 import { useAuth } from "../../contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import useModels from "../../logic/hooks/modelos/useModels";
+import useServices from "../../logic/hooks/servicios/useServices";
 
 type FormValues = {
   keyName: string;
   keyValue: string;
   expirationDate: string;
-  serviceCategory: string;
-  keyModel: string;
+  serviceCategory?: string;
+  keyModel?: string;
 };
 
 enum KeyState {
@@ -24,49 +26,13 @@ enum KeyState {
   ERROR = "ERROR",
 }
 
-const serviceCategories = [
-  "Cohere",
-  "Ngrok",
-  "OpenAI",
-  "IBM Watson",
-  "Google Cloud AI",
-  "Microsoft Azure Cognitive Services",
-  "Hugging Face",
-  "DeepAI",
-  "Clarifai",
-  "Algolia",
-  "Twilio",
-  "Amazon Rekognition",
-  "Speechmatics",
-  "OpenCV AI Kit (OAK)",
-  "Vize.ai",
-  "TextRazor",
-  "MonkeyLearn",
-  "AssemblyAI",
-];
-
-const keyModels = [
-  "LLM Models",
-  "Image Generation Models",
-  "Image Processing Models",
-  "Audio and Voice Analysis Models",
-  "Video Processing Models",
-  "Text Analysis Models",
-  "Facial Analysis and Recognition Models",
-  "Image Classification Models",
-  "Sentiment Analysis Models",
-  "Natural Language Processing (NLP) Models",
-  "Document Analysis Models",
-  "Image Classification Models",
-  "Document Analysis Models",
-  "Natural Language Processing (NLP) Models",
-];
-
 export default function App() {
   const [keyState, setKeyState] = useState<KeyState>(KeyState.NOT_LOADED);
   const { createKey, loading, error } = useCreateKey();
   const { user } = useAuth();
   const router = useRouter();
+  const { models, loading: modelsLoading, error: modelsError } = useModels(user?.token);
+  const { services, loading: servicesLoading, error: servicesError } = useServices(user?.token);
 
   useEffect(() => {
     if (!user) {
@@ -84,23 +50,25 @@ export default function App() {
     },
   });
 
-  const { register, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState, setValue } = form;
   const { errors } = formState;
 
   const onSubmit = async (data: FormValues) => {
     setKeyState(KeyState.LOADING);
-    createKey(
-      {
-        name: data.keyName,
-        key: data.keyValue,
-        expiresAt: new Date(data.expirationDate).toISOString(),
-        createdAt: new Date().toISOString(),
-        user: { id: 1 },
-        service: { id: serviceCategories.indexOf(data.serviceCategory) + 1 },
-        model: data.keyModel,
-      },
-      user?.token
-    )
+    const selectedService = services.find(s => s.name === data.serviceCategory);
+    const selectedModel = models.find(m => m.name === data.keyModel);
+
+    const payload = {
+      name: data.keyName,
+      key: data.keyValue,
+      expiresAt: new Date(data.expirationDate).toISOString(),
+      createdAt: new Date().toISOString(),
+      user: { id: 1 },
+      service: data.serviceCategory ? { id: data.serviceCategory } : null,
+      model: data.keyModel ? { id: data.keyModel } : null,
+    };
+
+    createKey(payload, user?.token)
       .then((res) => {
         console.log(res);
         setKeyState(KeyState.LOADED);
@@ -196,17 +164,16 @@ export default function App() {
         </div>
         <div className="w-full mb-4">
           <Select
-            isRequired
             label="Service Category"
             placeholder="Select service category"
             className={`${poppins.className} w-full`}
-            {...register("serviceCategory", {
-              required: "Service category is required",
-            })}
+            {...register("serviceCategory")}
+            isLoading={servicesLoading}
+            isDisabled={servicesLoading || servicesError}
           >
-            {serviceCategories.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
+            {services.map((service) => (
+              <SelectItem key={service.id} value={service.id}>
+                {service.name}
               </SelectItem>
             ))}
           </Select>
@@ -220,17 +187,16 @@ export default function App() {
         </div>
         <div className="w-full mb-4">
           <Select
-            isRequired
             label="Key Model"
             placeholder="Select key model"
             className={`${poppins.className} w-full`}
-            {...register("keyModel", {
-              required: "Key model is required",
-            })}
+            {...register("keyModel")}
+            isLoading={modelsLoading}
+            isDisabled={modelsLoading || modelsError}
           >
-            {keyModels.map((model) => (
-              <SelectItem key={model} value={model}>
-                {model}
+            {models.map((model) => (
+              <SelectItem key={model.id} value={model.id}>
+                {model.name}
               </SelectItem>
             ))}
           </Select>

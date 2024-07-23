@@ -8,7 +8,6 @@ const useKeys = (bearer) => {
 
   useEffect(() => {
     const fetchKeys = async () => {
-      console.log("useKeys.js: fetchKeys: bearer: ", bearer);
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys/all`, {
           headers: {
@@ -19,7 +18,6 @@ const useKeys = (bearer) => {
           throw new Error(`Error fetching keys: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log("useKeys.js: fetchKeys: data: ", data);
         setKeys(data);
       } catch (err) {
         setError(err);

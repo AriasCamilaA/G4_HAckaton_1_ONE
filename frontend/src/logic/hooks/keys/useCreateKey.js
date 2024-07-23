@@ -6,6 +6,8 @@ const useCreateKey = () => {
 
   const createKey = async (keyData, bearer) => {
     setLoading(true);
+    console.log("DATA KEY: ", keyData);
+    console.log("DATA bearer: ", bearer);
     try {
       setLoading(true); // Es una buena práctica asegurar que la carga comience antes de la llamada fetch
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/keys`, {
@@ -24,10 +26,10 @@ const useCreateKey = () => {
       }
     
       const data = await response.json();
-      console.log(data);
     } catch (err) {
-      console.log( err);
       setError(err);
+      console.error(err);
+      throw err;
     } finally {
       setLoading(false);
     }
