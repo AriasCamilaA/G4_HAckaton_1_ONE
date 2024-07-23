@@ -129,7 +129,7 @@ export default function Dashboard() {
               <CardFooter className="gap-3 px-3 pb-4 mx-3 mt-0 mb-3">
                 <button className="px-8 py-3 transition duration-200 ease-in-out rounded-lg hover:scale-110 bg-text">
                   <Link
-                    href="/Service"
+                    href="/Services"
                     className={`${poppins.className} text-white`}
                   >
                     Categorize Keys

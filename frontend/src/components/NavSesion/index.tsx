@@ -37,7 +37,7 @@ export default function NavSesion() {
     <div className=" mx-auto p-5 lg:max-w-[56.25rem] xl:max-w-[95%] 2xl:w-[95.25rem]">
       <div className="flex items-center justify-between">
         <div>
-          <Link href="/dashboard">
+          <Link href="/Dashboard">
             <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
               <img className="w-8" src="/logo.svg" alt="logo" />
               <span

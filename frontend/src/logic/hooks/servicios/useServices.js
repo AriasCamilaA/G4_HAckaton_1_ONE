@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-// import { adaptService } from '../adapters/serviceAdapter';
-
 const useServices = (bearer) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,6 +12,9 @@ const useServices = (bearer) => {
             'Authorization': `Bearer ${bearer}`
           }
         });
+        if (!response.ok) {
+          throw new Error(`Error fetching services: ${response.statusText}`);
+        }
         const data = await response.json();
         setServices(data);
       } catch (err) {
@@ -23,7 +24,11 @@ const useServices = (bearer) => {
       }
     };
 
-    fetchServices();
+    if (bearer) {
+      fetchServices();
+    } else {
+      setLoading(false);
+    }
   }, [bearer]);
 
   return { services, loading, error };
