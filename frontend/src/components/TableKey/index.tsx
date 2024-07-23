@@ -43,6 +43,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "expiresAt",
   "user",
   "service",
+  "model",
   "actions",
 ];
 
@@ -53,6 +54,7 @@ const columns = [
   { name: "Expires At", uid: "expiresAt", sortable: true },
   { name: "User", uid: "user", sortable: true },
   { name: "Service", uid: "service", sortable: true },
+  { name: "Model", uid: "model", sortable: true },
   { name: "Actions", uid: "actions" },
 ];
 
@@ -234,6 +236,14 @@ export default function TableKey() {
           <div className="flex flex-col">
             <p className="capitalize text-bold text-small">
               {key.service?.name}
+            </p>
+          </div>
+        );
+      case "model":
+        return (
+          <div className="flex flex-col">
+            <p className="capitalize text-bold text-small">
+              {key.model?.name}
             </p>
           </div>
         );
@@ -485,6 +495,8 @@ export default function TableKey() {
                         expirationDate: currentKey.expiresAt.split("T")[0],
                         serviceCategory: currentKey.service?.id.toString() || "",
                         keyModel: currentKey.model?.id.toString() || "",
+                        nameService: currentKey.service?.name.toString() || "",
+                        nameModel: currentKey.model?.name.toString() || "",
                         createdAt: currentKey.createdAt,
                         user: currentKey.user,
                       }}

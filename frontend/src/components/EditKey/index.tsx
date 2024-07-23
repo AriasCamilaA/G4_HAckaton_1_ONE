@@ -157,7 +157,7 @@ export default function EditKey({ keyId, initialData, onSuccess }) {
         <div className="w-full mb-4">
           <Select
             label="Service Category"
-            placeholder="Select service category"
+            placeholder={initialData.nameService}
             className={`${poppins.className} w-full`}
             {...register("serviceCategory")}
             isLoading={servicesLoading}
@@ -179,7 +179,7 @@ export default function EditKey({ keyId, initialData, onSuccess }) {
         <div className="w-full mb-4">
           <Select
             label="Key Model"
-            placeholder="Select key model"
+            placeholder={initialData.nameModel}
             className={`${poppins.className} w-full`}
             {...register("keyModel")}
             isLoading={modelsLoading}
