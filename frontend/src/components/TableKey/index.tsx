@@ -33,6 +33,7 @@ import { Alert } from "../../utilities";
 import { poppins } from "../../app/fonts";
 import { capitalize } from "./utils";
 import useKeys from "../../logic/hooks/keys/useKeys";
+import useDeleteKey from "../../logic/hooks/keys/useDeleteKey";
 import { useAuth } from "../../contexts/AuthContext";
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -72,6 +73,8 @@ export default function TableKey() {
   const [page, setPage] = useState(1);
   const { keys, loading, error, refetch } = useKeys(user?.token); // Pass the bearer token to the custom hook
 
+  const { deleteKey } = useDeleteKey(); // Use the deleteKey hook
+
   const [currentKey, setCurrentKey] = useState(null); // State to store the current key being edited
 
   const refreshKeys = () => {
@@ -86,6 +89,34 @@ export default function TableKey() {
   const closeEditModal = () => {
     setIsEditModalOpen(false);
     setCurrentKey(null);
+  };
+
+  const handleDelete = async (keyId) => {
+    const result = await Alert.fire({
+      title: "Delete key",
+      text: "Are you sure you want to delete this key?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteKey(keyId, user?.token);
+        Alert.fire({
+          title: "Delete key",
+          text: "Key deleted successfully.",
+          icon: "success",
+        });
+        refreshKeys();
+      } catch (err) {
+        Alert.fire({
+          title: "Delete key",
+          text: "Something went wrong.",
+          icon: "error",
+        });
+      }
+    }
   };
 
   const pages = Math.ceil(keys.length / rowsPerPage);
@@ -207,7 +238,10 @@ export default function TableKey() {
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete key">
-              <span className="text-lg cursor-pointer text-danger active:opacity-50">
+              <span
+                className="text-lg cursor-pointer text-danger active:opacity-50"
+                onClick={() => handleDelete(key.id)}
+              >
                 <DeleteIcon />
               </span>
             </Tooltip>
