@@ -4,7 +4,6 @@ import com.back.model.entities.Key;
 import com.back.model.entities.projection.IkeyDTO;
 import com.back.service.KeyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

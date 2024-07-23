@@ -1,9 +1,7 @@
 package com.back.repository;
 
 import com.back.model.entities.Key;
-import com.back.model.entities.Service;
 import com.back.model.entities.projection.IkeyDTO;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

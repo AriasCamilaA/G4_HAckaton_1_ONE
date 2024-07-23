@@ -2,7 +2,6 @@ package com.back.controller;
 
 import com.back.config.SwaggerConfig;
 import com.back.security.service.IKeyCloudService;
-import com.back.security.util.AuthService;
 import com.back.security.util.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
