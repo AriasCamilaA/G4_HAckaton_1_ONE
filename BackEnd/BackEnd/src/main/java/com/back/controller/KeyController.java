@@ -1,12 +1,14 @@
 package com.back.controller;
 
 import com.back.model.entities.Key;
+import com.back.model.entities.projection.IkeyDTO;
 import com.back.service.KeyService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/keys")
@@ -23,6 +25,15 @@ public class KeyController {
             return ResponseEntity.ok(newKey);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error creating key: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/service/{serviceId}")
+    public List<IkeyDTO> getKeysByServiceId(@PathVariable Long serviceId) {
+        try {
+            return keyService.getKeysByService(serviceId);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving keys by service: " + e.getMessage());
         }
     }
 

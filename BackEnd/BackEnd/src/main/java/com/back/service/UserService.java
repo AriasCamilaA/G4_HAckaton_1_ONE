@@ -13,4 +13,6 @@ public interface UserService {
     List<User> getAllUsers();
     User updateUser(Long id, User userDetails);
     void deleteUser(Long id);
+    User findByIdKeycloak(String idKeycloak);
+
 }

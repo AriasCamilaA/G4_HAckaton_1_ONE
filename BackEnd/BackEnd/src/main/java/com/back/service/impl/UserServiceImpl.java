@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
                 .map(user -> {
                     user.setName(userDetails.getName());
                     user.setEmail(userDetails.getEmail());
-                    user.setPassword(userDetails.getPassword());
                     user.setRoles(userDetails.getRoles());
                     return userRepository.save(user);
                 }).orElseThrow(() -> new RuntimeException("User not found with id " + id));
@@ -45,5 +44,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User findByIdKeycloak(String idKeycloak) {
+        return userRepository.findByIdKeycloak(idKeycloak);
     }
 }
