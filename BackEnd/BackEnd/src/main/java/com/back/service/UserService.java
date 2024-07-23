@@ -14,7 +14,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User updateUser(Long id, User userDetails);
+    User updateUser(String idKeyCloak, User userDetails);
 
     void deleteUser(Long id);
 
