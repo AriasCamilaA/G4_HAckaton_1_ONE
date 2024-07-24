@@ -148,24 +148,23 @@ export default function Dashboard() {
                     <h5
                       className={`${poppins.className} text-lg text-text tracking-tight`}
                     >
-                      Logs
+                      Models
                     </h5>
                   </div>
                 </div>
               </CardHeader>
               <CardBody className="w-auto px-3 pt-0 pb-0 mx-3 mt-0 mb-3 text-small text-default-400">
                 <p>
-                  View detailed activity logs for your AI keys, including usage,
-                  modifications, and more.
+                    Now you can see the key models you have. You will be able to test them right here.
                 </p>
               </CardBody>
               <CardFooter className="gap-3 px-3 pb-4 mx-3 mt-0 mb-3">
                 <button className="px-8 py-3 transition duration-200 ease-in-out rounded-lg hover:scale-110 bg-text">
                   <Link
-                    href="/logs"
+                    href="/Model"
                     className={`${poppins.className} text-white`}
                   >
-                    View Logs
+                    View Models
                   </Link>
                 </button>
               </CardFooter>
