@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { poppins } from "../../app/fonts";
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -45,11 +45,11 @@ export default function Navbar() {
       <nav className="flex items-center justify-between lg:mx-auto 2xl:max-w-[92.25rem]">
         <Link href="/">
           <div className="flex items-center gap-[10px] transition duration-200 ease-in-out hover:scale-110">
-          <Image
+            <Image
               className="w-8"
               src="/logo.svg"
               alt="logo"
-              width={32} 
+              width={32}
               height={32}
             />
             <span
@@ -65,7 +65,13 @@ export default function Navbar() {
           onClick={toggleMenu}
           aria-label="Open menu"
         >
-          <Image className="md:w-7" src="/hamburger.svg" alt="Hamburger icon" width={28} height={28} />
+          <Image
+            className="md:w-7"
+            src="/hamburger.svg"
+            alt="Hamburger icon"
+            width={28}
+            height={28}
+          />
         </button>
 
         <button
@@ -73,7 +79,12 @@ export default function Navbar() {
           onClick={toggleMenu}
           aria-label="Close menu"
         >
-          <Image src="/closeHamburguer.svg" alt="Close menu icon" width={28} height={28} />
+          <Image
+            src="/closeHamburguer.svg"
+            alt="Close menu icon"
+            width={28}
+            height={28}
+          />
         </button>
 
         <div
@@ -81,7 +92,7 @@ export default function Navbar() {
             isMenuOpen
               ? "translate-x-0 transition-transform lg:transition-none"
               : "translate-x-full transition-transform md:transition-none lg:translate-x-0"
-          } absolute right-0 top-0 h-screen w-2/3 bg-background-color px-10 py-[80px] lg:relative lg:h-auto lg:w-auto lg:gap-4 lg:bg-transparent lg:px-0 lg:py-0`}
+          } absolute right-0 top-0 h-screen w-2/3 bg-white px-10 py-[80px] lg:relative lg:h-auto lg:w-auto lg:gap-4 lg:bg-transparent lg:px-0 lg:py-0`}
         >
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
             <ul className="gap-3 space-y-10 lg:flex lg:space-x-4 lg:space-y-0">
@@ -125,14 +136,29 @@ export default function Navbar() {
           <div className="mt-[224px] lg:hidden">
             <span className={`${poppins.className} text-text`}>Follow Us</span>
             <div className="flex gap-3 mt-4">
-            <a className="flex items-center justify-center w-8 h-8" href="#">
-                <Image src="/facebook.svg" alt="facebook social" width={32} height={32} />
+              <a className="flex items-center justify-center w-8 h-8" href="#">
+                <Image
+                  src="/facebook.svg"
+                  alt="facebook social"
+                  width={24}
+                  height={24}
+                />
               </a>
               <a className="flex items-center justify-center w-8 h-8" href="#">
-                <Image src="/instagram.svg" alt="instagram social" width={32} height={32} />
+                <Image
+                  src="/instagram.svg"
+                  alt="instagram social"
+                  width={24}
+                  height={24}
+                />
               </a>
               <a className="flex items-center justify-center w-8 h-8" href="#">
-                <Image src="/twitter.svg" alt="twitter social" width={32} height={32} />
+                <Image
+                  src="/twitter.svg"
+                  alt="twitter social"
+                  width={24}
+                  height={24}
+                />
               </a>
             </div>
           </div>
