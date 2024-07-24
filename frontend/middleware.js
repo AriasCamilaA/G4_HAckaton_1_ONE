@@ -23,8 +23,10 @@ export function middleware(req) {
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
+    '/Dashboard',
+    '/Dashboard/:path*',
     '/manageKeys/:path*',
+    '/Model/:path*',
     '/logs/:path*',
     '/login',
     '/registration',

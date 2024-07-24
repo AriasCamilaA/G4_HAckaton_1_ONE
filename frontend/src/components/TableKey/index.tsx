@@ -2,7 +2,7 @@
 
 import AddKey from "../../components/AddKey";
 import EditKey from "../../components/EditKey";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -35,6 +35,8 @@ import { capitalize } from "./utils";
 import useKeys from "../../logic/hooks/keys/useKeys";
 import useDeleteKey from "../../logic/hooks/keys/useDeleteKey";
 import { useAuth } from "../../contexts/AuthContext";
+import useTokenInfo from "../../logic/hooks/auth/useTokenInfo";
+import useUserDetails from "../../logic/hooks/auth/useUserDetails";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
@@ -60,6 +62,11 @@ const columns = [
 
 export default function TableKey() {
   const { user } = useAuth(); // Assuming useAuth provides user with a token
+  const { tokenInfo, loading: tokenInfoLoading, error: tokenInfoError } = useTokenInfo(user?.token); // Use the custom hook
+  const userId = tokenInfo?.['subject o idUser'];
+  const { userDetails, loading: userDetailsLoading, error: userDetailsError } = useUserDetails(userId, user?.token);
+
+  
   const [filterValue, setFilterValue] = useState("");
   const [visibleColumns, setVisibleColumns] = useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
@@ -89,6 +96,8 @@ export default function TableKey() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const { keys, loading, error, refetch } = useKeys(user?.token); // Pass the bearer token to the custom hook
+  // Filtrar las llaves del usuario autenticado
+  const userKeys = keys.filter((key) => key.user.id === userDetails?.id);
 
   const { deleteKey } = useDeleteKey(); // Use the deleteKey hook
 
@@ -140,7 +149,7 @@ export default function TableKey() {
     }
   }, [deleteKey, user?.token]);
 
-  const pages = Math.ceil(keys.length / rowsPerPage);
+  const pages = Math.ceil(userKeys.length / rowsPerPage);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -153,7 +162,7 @@ export default function TableKey() {
   }, [visibleColumns]);
 
   const filteredItems = useMemo(() => {
-    let filteredKeys = [...keys];
+    let filteredKeys = [...userKeys];
 
     if (hasSearchFilter) {
       filteredKeys = filteredKeys.filter((key) =>
@@ -162,7 +171,7 @@ export default function TableKey() {
     }
 
     return filteredKeys;
-  }, [keys, filterValue]);
+  }, [userKeys, filterValue]);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -398,6 +407,7 @@ export default function TableKey() {
       </div>
     );
   }, [page, pages, hasSearchFilter]);
+
 
   return (
     <div className="lg:mx-auto lg:max-w-[56.25rem] 2xl:max-w-[79.25rem] p-5 mx-auto my-[60px] xl:max-w-[71.5rem] w-full">
