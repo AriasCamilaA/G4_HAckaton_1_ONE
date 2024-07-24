@@ -21,7 +21,17 @@ almacenar, categorizar, y monitorear las keys, así como registrar su uso y noti
 - Acceso basado en roles.
 - API RESTful para integraciones.
 
+
+
 ## Instalación
+
+### Prerrequisitos
+
+- Java 11+
+- Keycloak
+- Node.js 14+
+- PostgreSQL
+- Node
 
 ### Backend
 - Descargar Keycloak desde la página oficial y descomprimir el archivo.
@@ -45,16 +55,25 @@ Dada la posibilidad de algún fallo en la ejecución, escribir el siguiente coma
 
 ``` bin\kc.bat start --verbose```
 
-##### Credenciales por default 
+##### Credenciales por default para api
 - Usuario: admin
 - Contraseña: admin
 
-### Prerrequisitos
+### Backend
+En la raiz del proyecto
+```bash
+    cd .\frontend\
+```
+```bash
+    npm i
+```
+```bash
+    npm run dev
+```
 
-- Java 11+
-- Keycloak
-- Node.js 14+
-- PostgreSQL
+
+
+
 
 # Funciones:
 
